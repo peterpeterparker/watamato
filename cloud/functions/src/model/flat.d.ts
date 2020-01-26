@@ -1,4 +1,6 @@
-interface Flat {
+import {firestore} from 'firebase-admin';
+
+interface FlatData {
     url: string | null;
     image_url: string | null;
     title: string | null;
@@ -6,4 +8,14 @@ interface Flat {
     rooms: number;
     price: number;
     published_at: Date;
+
+    created_at?: firestore.Timestamp;
+    updated_at?: firestore.Timestamp;
+}
+
+interface Flat {
+    id: string;
+    ref: firestore.DocumentReference;
+
+    data: FlatData;
 }

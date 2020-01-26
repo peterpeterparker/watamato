@@ -4,7 +4,9 @@ import {Browser, launch, Page} from 'puppeteer';
 
 import {JSDOM} from 'jsdom';
 
-export async function crawlRonorp(): Promise<Flat[] | undefined> {
+import {FlatData} from '../model/flat';
+
+export async function crawlRonorp(): Promise<FlatData[] | undefined> {
     const browser: Browser = await launch({args: ['--no-sandbox']});
 
     const page: Page = await browser.newPage();
@@ -15,14 +17,14 @@ export async function crawlRonorp(): Promise<Flat[] | undefined> {
     await goToWohnung(page);
     await filterSearch(page);
 
-    const elements: Flat[] | undefined = await findElements(page);
+    const elements: FlatData[] | undefined = await findElements(page);
 
     await browser.close();
 
     return elements;
 }
 
-async function findElements(page: Page): Promise<Flat[] | undefined> {
+async function findElements(page: Page): Promise<FlatData[] | undefined> {
     await autoScroll(page, new Date());
 
     page.on('console', consoleObj => console.log(consoleObj.text()));
@@ -35,7 +37,7 @@ async function findElements(page: Page): Promise<Flat[] | undefined> {
 
     // TODO: Filter either more recent than time or later check if key already exists
 
-    const results: Flat[] = elements.filter((element: string) => {
+    const results: FlatData[] = elements.filter((element: string) => {
         const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
         const dateChild = dom.window.document.querySelector('div.user div.pull-left');
 
