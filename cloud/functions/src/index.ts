@@ -1,8 +1,14 @@
 import * as functions from 'firebase-functions';
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+import * as admin from 'firebase-admin';
+const app: admin.app.App = admin.initializeApp();
+app.firestore().settings({timestampsInSnapshots: true});
+
+import {crawlImmo} from './crawler/crawler';
+
+const runtimeOpts = {
+    timeoutSeconds: 240,
+    memory: <const> '1GB'
+};
+
+export const crawl = functions.runWith(runtimeOpts).https.onRequest(crawlImmo);
