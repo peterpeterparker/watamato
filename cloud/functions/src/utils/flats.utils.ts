@@ -21,10 +21,10 @@ export async function save(flats: FlatData[] | undefined) {
 function createOrMerge(flatData: FlatData | undefined): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
         try {
-            const flat: Flat | undefined = await find(flatData);
+            const flat: Flat | undefined = await get(flatData);
 
             if (flat === undefined) {
-                await add(flatData);
+                await add('/flats/', flatData);
             } else {
                 await merge(flat.id, flatData);
             }
@@ -34,7 +34,7 @@ function createOrMerge(flatData: FlatData | undefined): Promise<void> {
     });
 }
 
-function add(flatData: FlatData | undefined): Promise<void> {
+export function add(collectionPath: string, flatData: FlatData | undefined): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
         try {
             if (!flatData || flatData === undefined) {
@@ -42,7 +42,7 @@ function add(flatData: FlatData | undefined): Promise<void> {
                 return;
             }
 
-            const collectionRef: admin.firestore.CollectionReference = admin.firestore().collection('/flats/');
+            const collectionRef: admin.firestore.CollectionReference = admin.firestore().collection(collectionPath);
 
             flatData.created_at = admin.firestore.Timestamp.now();
             flatData.updated_at = admin.firestore.Timestamp.now();
@@ -77,7 +77,7 @@ function merge(flatId: string, flatData: FlatData | undefined): Promise<void> {
     });
 }
 
-function find(flatData: FlatData | undefined): Promise<Flat | undefined> {
+function get(flatData: FlatData | undefined): Promise<Flat | undefined> {
     return new Promise<Flat | undefined>(async (resolve, reject) => {
         try {
             if (!flatData || flatData === undefined || !flatData.url) {
@@ -99,6 +99,41 @@ function find(flatData: FlatData | undefined): Promise<Flat | undefined> {
                     ref: doc.ref,
                     data: doc.data() as FlatData
                 });
+            } else {
+                resolve(undefined);
+            }
+        } catch (err) {
+            reject(err);
+        }
+    })
+}
+
+export function findAll(): Promise<Flat[] | undefined> {
+    return new Promise<Flat[] | undefined>(async (resolve, reject) => {
+        try {
+            const collectionRef: admin.firestore.CollectionReference = admin.firestore().collection('/flats/');
+
+            const from: Date = new Date();
+            from.setDate(from.getDate() - 5);
+
+            const snapShot: admin.firestore.QuerySnapshot = await collectionRef
+                .where('published_at', '>', from)
+                .get();
+
+            if (snapShot && snapShot.docs && snapShot.docs.length > 0) {
+                const flats: Flat[] = snapShot.docs.map((doc) => {
+                    const data: Object = doc.data() as FlatData;
+                    const id = doc.id;
+                    const ref = doc.ref;
+
+                    return {
+                        id: id,
+                        ref: ref,
+                        data: data
+                    } as Flat;
+                });
+
+                resolve(flats);
             } else {
                 resolve(undefined);
             }

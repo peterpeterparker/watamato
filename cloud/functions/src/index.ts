@@ -5,6 +5,7 @@ const app: admin.app.App = admin.initializeApp();
 app.firestore().settings({timestampsInSnapshots: true});
 
 import {crawlImmo} from './crawler/crawler';
+import {watchUserCreate} from './user/watch-user';
 
 const runtimeOpts = {
     timeoutSeconds: 240,
@@ -12,3 +13,5 @@ const runtimeOpts = {
 };
 
 export const crawl = functions.runWith(runtimeOpts).https.onRequest(crawlImmo);
+
+export const userCreate = functions.auth.user().onCreate(watchUserCreate);
