@@ -28,7 +28,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     constructor(private flatsService: FlatsService) {
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this.flats$ = this.flatsService.watchFlats();
 
         this.lastPageReachedSubscription = this.flatsService.watchLastPageReached().subscribe((reached: boolean) => {
@@ -57,7 +57,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     }
 
     toDateObj(flatDate): Date {
-      return toDateObj(flatDate);
+        return toDateObj(flatDate);
     }
 
 }

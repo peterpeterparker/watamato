@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 
 import {AngularFireAuth} from '@angular/fire/auth';
-import {User} from 'firebase';
+import {User as FirebaseUser} from 'firebase';
 
 import {Observable} from 'rxjs';
 
@@ -25,7 +25,7 @@ export class AuthService {
         });
     }
 
-    user(): Observable<User> {
+    user(): Observable<FirebaseUser> {
         return this.angularFireAuth.authState;
     }
 }

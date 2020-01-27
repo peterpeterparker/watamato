@@ -4,11 +4,10 @@ import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} fro
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
-import {User} from 'firebase';
-
 import {Flat, FlatData} from '../../model/flat';
+import {User} from '../../model/user';
 
-import {AuthService} from '../auth/auth.service';
+import {UserService} from '../user/user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -19,13 +18,13 @@ export class FlatsService {
     private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     private nextQueryAfter: QueryDocumentSnapshot<FlatData>;
-    private queryLimit = 20;
+    private queryLimit = 2;
 
     private paginationSubscription: Subscription;
     private findSubscription: Subscription;
 
     constructor(private fireStore: AngularFirestore,
-                private authService: AuthService) {
+                private userService: UserService) {
     }
 
     async init() {
@@ -56,7 +55,7 @@ export class FlatsService {
 
     find() {
         try {
-            this.authService.user().pipe(take(1), filter(user => user !== undefined)).subscribe(async (user: User) => {
+            this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
                 const collection: AngularFirestoreCollection<FlatData> = this.getCollectionQuery(user);
 
                 this.unsubscribe();
@@ -73,7 +72,7 @@ export class FlatsService {
     }
 
     private getCollectionQuery(user: User): AngularFirestoreCollection<FlatData> {
-        const collectionName = `/users/${user.uid}/flats/`;
+        const collectionName = `/users/${user.id}/flats/`;
 
         if (this.nextQueryAfter) {
             return this.fireStore.collection<FlatData>(collectionName, ref =>
@@ -117,9 +116,6 @@ export class FlatsService {
 
     private addFlats(flats: Flat[]): Promise<void> {
         return new Promise<void>((resolve) => {
-
-            console.log(flats);
-
             if (!flats || flats.length <= 0) {
                 this.lastPageReached.next(true);
 
@@ -129,8 +125,6 @@ export class FlatsService {
 
             this.flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: Flat[]) => {
                 this.flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
-
-                console.log('yolo',  currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
 
                 resolve();
             });
