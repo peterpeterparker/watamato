@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
   <ng-container *ngIf="(user$ | async) as user; else userLoading;">
     <main>
-      User loaded :)
+        <app-feed></app-feed>
     </main>
   </ng-container>
 
