@@ -71,7 +71,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
     page.on('console', consoleObj => console.log(consoleObj.text()));
 
-    const elements: string[] = await page.evaluate(() => [...document.querySelectorAll('div.inserate')].map(div => div.innerHTML));
+    const elements: string[] = await page.evaluate(() => [...document.querySelectorAll('div.short_advert.inserate')].map(div => div.innerHTML));
 
     if (!elements || elements.length <= 0) {
         return undefined;
