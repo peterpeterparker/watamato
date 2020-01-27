@@ -1,14 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
+  <ng-container *ngIf="(user$ | async) as user; else userLoading;">
+    <main>
+      User loaded :)
+    </main>
+  </ng-container>
 
-<ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+  <ng-template #userLoading>
+    <main>
+      User loading wait for it...
+    </main>
+  </ng-template>
 </ion-content>

@@ -1,29 +1,26 @@
 import {Injectable} from '@angular/core';
 
-import {AngularFireAuth} from '@angular/fire/auth';
-import {User as FirebaseUser} from 'firebase';
+import {User} from 'firebase';
 
-import {Subscription} from 'rxjs';
+import {AuthService} from '../auth/auth.service';
+import {filter, take} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class FlatsService {
 
-    private authSubscription: Subscription;
-
-    constructor(private angularFireAuth: AngularFireAuth) {
+    constructor(private authService: AuthService) {
     }
 
     init() {
-        this.authSubscription = this.angularFireAuth.authState.subscribe(async (user: FirebaseUser) => {
-            console.log(user);
+        this.authService.user().pipe(take(1), filter(user => user !== undefined)).subscribe(async (user: User) => {
+            // TODO Init search
+            console.log('find', user);
         });
     }
 
     destroy() {
-        if (this.authSubscription) {
-            this.authSubscription.unsubscribe();
-        }
+
     }
 }
