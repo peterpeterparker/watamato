@@ -39,11 +39,13 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
     const results: FlatData[] = elements.filter((element: string) => {
         const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
-        const dateChild = dom.window.document.querySelector('div.user div.pull-left');
+        // const dateChild = dom.window.document.querySelector('div.user div.pull-left');
 
         const link = dom.window.document.querySelector('a.image-wrapper');
 
-        return link && filterPlz(dom) && dateChild && dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g);
+        // TODO filterPLZ and date -> reactivate
+        // return link && filterPlz(dom) && dateChild && dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g);
+        return link !== undefined;
 
         // Match a date example
         // return dateChild && dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
@@ -90,7 +92,8 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
     return results;
 }
 
-function filterPlz(dom: JSDOM): boolean {
+// TODO rm export
+export function filterPlz(dom: JSDOM): boolean {
     const content = dom.window.document.querySelector('div.text_content p.special_data');
 
     if (!content) {
