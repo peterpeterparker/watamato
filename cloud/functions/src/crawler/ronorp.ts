@@ -109,9 +109,12 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
         }
 
         const today: Date = new Date();
-        if (time && time.innerHTML) {
+        if (time && time.innerHTML && time.innerHTML.indexOf(':') > -1) {
             today.setHours(parseInt(time.innerHTML.split(':')[0]));
             today.setMinutes(parseInt(time.innerHTML.split(':')[1]));
+        } else if (time && time.innerHTML && time.innerHTML.indexOf('.') > -1) {
+            today.setDate(parseInt(time.innerHTML.split('.')[0]));
+            today.setMonth(parseInt(time.innerHTML.split('.')[1]));
         }
 
         let url: string | null = null;
