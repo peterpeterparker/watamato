@@ -1,3 +1,29 @@
-<p>
-  feed works!
-</p>
+<ng-container *ngIf="loaded; else feedLoading;">
+
+  <ion-card *ngFor="let flat of (flats$ | async);">
+    <img [src]="flat.data.image_url"/>
+
+    <ion-card-header>
+      <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
+      <ion-card-title>{{flat.data.title}}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{flat.data.location}}</p>
+      <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
+      <p>{{flat.data.rooms}} rooms</p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-infinite-scroll (ionInfinite)="findNext($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ng-container>
+
+<ng-template #feedLoading>
+  <main>
+    Initializing your feed
+  </main>
+</ng-template>
+

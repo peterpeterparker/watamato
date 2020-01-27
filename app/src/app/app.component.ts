@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private authService: AuthService,
-        private flastService: FlatsService
+        private flatsService: FlatsService
     ) {
         this.initializeApp();
     }
@@ -33,11 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
     async ngOnInit() {
         await this.authService.anonymousLogin();
-        this.flastService.init();
+        await this.flatsService.init();
     }
 
     ngOnDestroy() {
-        this.flastService.destroy();
+        this.flatsService.destroy();
     }
-
 }
