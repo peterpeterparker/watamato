@@ -19,26 +19,43 @@ export async function crawlRonorp(): Promise<FlatData[] | undefined> {
 
     let elements: FlatData[] | undefined = await findElements(page);
 
-    try {
-        const index: number = 2;
-        await page.waitForSelector(`a[data-value="${index}"]`, {timeout: 500});
+    // There might be some flats on next page
+    // We don't iterate further, that should be enough according the search limitation
+    if (allElementsPublishedToday(elements)) {
+        try {
+            const index: number = 2;
+            await page.waitForSelector(`a[data-value="${index}"]`, {timeout: 500});
 
-        // There might be some flats on next page
-        // We don't iterate further, that should be enough according the search limitation
-        await goNextPage(page, 2);
+            await goNextPage(page, 2);
 
-        const nextElements: FlatData[] | undefined = await findElements(page);
+            const nextElements: FlatData[] | undefined = await findElements(page);
 
-        if (nextElements !== undefined && nextElements.length > 0) {
-            elements = [...elements as FlatData[], ...nextElements];
+            if (nextElements !== undefined && nextElements.length > 0) {
+                elements = [...elements as FlatData[], ...nextElements];
+            }
+        } catch (error) {
+            // There is nothing to paginate, all results are on first page
         }
-    } catch (error) {
-        // There is nothing to paginate, all results are on first page
     }
 
     await browser.close();
 
     return elements;
+}
+
+function allElementsPublishedToday(elements: FlatData[] | undefined): boolean {
+    if (!elements || elements === undefined || elements.length <= 0) {
+        return true;
+    }
+
+    const today: Date = new Date();
+    const notTodayElements: FlatData[] = elements.filter((element: FlatData) => {
+        return element.published_at.getDate() !== today.getDate() ||
+            element.published_at.getMonth() !== today.getMonth() ||
+            element.published_at.getFullYear() !== today.getFullYear()
+    });
+
+    return (!notTodayElements || notTodayElements.length <= 0);
 }
 
 async function goNextPage(page: Page, index: number) {
