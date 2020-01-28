@@ -71,24 +71,7 @@ export class FlatsNewService implements FlatsServiceInterface {
         this.paginationSubscription = result.paginationSubscription;
 
         result.query.subscribe(async (flats: UserFlat[]) => {
-            await this.addFlats(flats);
+            await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
         });
     };
-
-    private addFlats(flats: UserFlat[]): Promise<void> {
-        return new Promise<void>((resolve) => {
-            if (!flats || flats.length <= 0) {
-                this.lastPageReached.next(true);
-
-                resolve();
-                return;
-            }
-
-            this.flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: UserFlat[]) => {
-                this.flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
-
-                resolve();
-            });
-        });
-    }
 }

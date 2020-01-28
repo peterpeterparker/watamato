@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 
-import {Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
 import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
@@ -85,5 +85,22 @@ export class FlatsService {
                 });
             })
         );
+    }
+
+    addFlats(flats: UserFlat[], flatsSubject: BehaviorSubject<UserFlat[] | undefined>, lastPageReached: BehaviorSubject<boolean>): Promise<void> {
+        return new Promise<void>((resolve) => {
+            if (!flats || flats.length <= 0) {
+                lastPageReached.next(true);
+
+                resolve();
+                return;
+            }
+
+            flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: UserFlat[]) => {
+                flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
+
+                resolve();
+            });
+        });
     }
 }
