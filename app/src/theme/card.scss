@@ -1,6 +1,7 @@
 body {
-  ion-card {
+  ion-card[class*="sc-ion-card-md"] {
     background: white;
+    --background: white;
 
     cursor: pointer;
 

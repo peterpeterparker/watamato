@@ -18,6 +18,10 @@ main {
     background: var(--ion-color-light);
     border-radius: 3px;
 
+    div[status] {
+      min-height: 100vh;
+    }
+
     ion-label.column-title {
       padding: 8px 16px 0;
       font-weight: 500;

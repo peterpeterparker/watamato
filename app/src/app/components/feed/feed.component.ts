@@ -38,7 +38,15 @@ export class FeedComponent implements OnInit, OnDestroy {
 
         this.dragulaSubscription.add(dragulaService.drag('bag')
             .subscribe(({el}) => {
-                el.setAttribute('color', 'secondary');
+                this.cardBackToOrigin = false;
+            })
+        );
+
+        this.dragulaSubscription.add(dragulaService.cloned('bag')
+            .subscribe(({clone, original, cloneType}) => {
+                setTimeout(() => {
+                    (clone as HTMLElement).style.transform = 'rotate(5deg)';
+                }, 10);
                 this.cardBackToOrigin = false;
             })
         );

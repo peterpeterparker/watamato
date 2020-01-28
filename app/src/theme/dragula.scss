@@ -28,3 +28,12 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
   filter: alpha(opacity=20);
 }
+
+/* Custom */
+
+ion-card.gu-mirror {
+  transition: transform .3s ease-in-out;
+
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
