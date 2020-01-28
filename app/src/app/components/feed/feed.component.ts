@@ -8,7 +8,7 @@ import {filter, take} from 'rxjs/operators';
 
 import {UserFlat} from '../../model/user.flat';
 
-import {FlatsService} from '../../services/flats/flats.service';
+import {FlatsNewService} from '../../services/flats/flats.new.service';
 
 import {toDateObj} from '../../utils/date.utils';
 
@@ -34,7 +34,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     private cardBackToOrigin = false;
 
     constructor(private dragulaService: DragulaService,
-                private flatsService: FlatsService) {
+                private flatsNewService: FlatsNewService) {
 
         this.dragulaSubscription.add(dragulaService.drag('bag')
             .subscribe(({el}) => {
@@ -67,16 +67,16 @@ export class FeedComponent implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
-        this.flats$ = this.flatsService.watchFlats();
+        this.flats$ = this.flatsNewService.watchFlats();
 
-        this.lastPageReachedSubscription = this.flatsService.watchLastPageReached().subscribe((reached: boolean) => {
+        this.lastPageReachedSubscription = this.flatsNewService.watchLastPageReached().subscribe((reached: boolean) => {
             if (reached && this.infiniteScroll) {
                 this.loaded = true;
                 this.infiniteScroll.disabled = true;
             }
         });
 
-        this.flatsService.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
+        this.flatsNewService.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
             this.loaded = true;
         });
     }
@@ -93,7 +93,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     async findNext($event) {
         setTimeout(async () => {
-            await this.flatsService.find();
+            await this.flatsNewService.find();
             $event.target.complete();
         }, 500);
     }

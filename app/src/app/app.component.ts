@@ -6,8 +6,8 @@ import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AuthService} from './services/auth/auth.service';
-import {FlatsService} from './services/flats/flats.service';
 import {UserService} from './services/user/user.service';
+import {FlatsNewService} from './services/flats/flats.new.service';
 
 @Component({
     selector: 'app-root',
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
         private splashScreen: SplashScreen,
         private statusBar: StatusBar,
         private authService: AuthService,
-        private flatsService: FlatsService,
+        private flatsNewService: FlatsNewService,
         private userService: UserService
     ) {
         this.initializeApp();
@@ -35,13 +35,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
     async ngOnInit() {
         await this.authService.anonymousLogin();
-        await this.flatsService.init();
+        await this.flatsNewService.init();
 
         this.userService.init();
     }
 
     ngOnDestroy() {
-        this.flatsService.destroy();
+        this.flatsNewService.destroy();
         this.userService.destroy();
     }
 }
