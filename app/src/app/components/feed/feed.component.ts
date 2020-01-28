@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonInfiniteScroll} from '@ionic/angular';
+import {IonInfiniteScroll, ToastController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
@@ -49,6 +49,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     private cardBackToOrigin = false;
 
     constructor(private dragulaService: DragulaService,
+                private toastController: ToastController,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
                 private flatsAppliedService: FlatsAppliedService,
@@ -92,6 +93,8 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.dragulaSubscription.add(dragulaService.drop('bag')
             .subscribe(async ({el, target, source, sibling}) => {
                 await userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+
+                await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
 
                 await this.findAll();
             })
@@ -203,5 +206,18 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.statusLoaded.push(service.status());
 
         this.loaded = this.statusLoaded.length >= this.statusLength;
+    }
+
+    private async presentDeleteToast(status: UserFlatStatus) {
+        if (status !== UserFlatStatus.DISLIKED) {
+            return;
+        }
+
+        const toast = await this.toastController.create({
+            message: 'Deleted.',
+            duration: 500
+        });
+
+        await toast.present();
     }
 }
