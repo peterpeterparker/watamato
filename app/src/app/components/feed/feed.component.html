@@ -14,18 +14,6 @@
 
     <section>
       <div>
-        <ion-label class="column-title">Dislike</ion-label>
-
-        <div dragula="bag" [attr.status]="'disliked'">
-          <ion-card *ngFor="let flat of (flatsDisliked$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat"></app-flat>
-          </ion-card>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div>
         <ion-label class="column-title">Viewings</ion-label>
 
         <div dragula="bag" [attr.status]="'viewing'">
@@ -72,6 +60,12 @@
       </div>
     </section>
   </main>
+
+  <section class="delete ion-margin" dragula="bag" [attr.status]="'disliked'">
+    <div>
+      <ion-icon name="trash" [lazy]="true" aria-label="Delete"></ion-icon>
+    </div>
+  </section>
 
   <ion-infinite-scroll (ionInfinite)="findNext($event)">
     <ion-infinite-scroll-content>
