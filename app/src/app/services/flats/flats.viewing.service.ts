@@ -29,20 +29,6 @@ export class FlatsViewingService implements FlatsServiceInterface {
         await this.find();
     }
 
-    async destroy() {
-        this.unsubscribe();
-    }
-
-    private unsubscribe() {
-        if (this.paginationSubscription) {
-            this.paginationSubscription.unsubscribe();
-        }
-
-        if (this.findSubscription) {
-            this.findSubscription.unsubscribe();
-        }
-    }
-
     watchFlats(): Observable<UserFlat[]> {
         return this.flatsSubject.asObservable();
     }
