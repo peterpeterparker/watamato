@@ -28,3 +28,9 @@ main {
     }
   }
 }
+
+ion-infinite-scroll {
+  ion-infinite-scroll-content {
+    --color: var(--ion-color-light);
+  }
+}
