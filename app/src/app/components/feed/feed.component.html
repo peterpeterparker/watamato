@@ -3,7 +3,7 @@
     <section>
       <ion-label class="column-title">Incoming</ion-label>
 
-      <ion-card *ngFor="let flat of (flats$ | async);" mode="md">
+      <ion-card *ngFor="let flat of (flats$ | async);" mode="md" [href]="flat.data.url" target="_blank">
         <img [src]="flat.data.image_url" [class.ronorp]="flat.data.source === 'ronorp'"/>
 
         <ion-badge>Ronorp</ion-badge>
