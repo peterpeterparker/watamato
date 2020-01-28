@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
 import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
@@ -21,7 +21,7 @@ export interface FindFlats {
 export class FlatsService {
 
     private queryLimit = 2;
-    private until: Date = new Date();
+    private until: Date | undefined = undefined;
 
     constructor(private fireStore: AngularFirestore,
                 private userService: UserService) {
@@ -48,6 +48,11 @@ export class FlatsService {
 
     private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus): AngularFirestoreCollection<UserFlatData> {
         const collectionName = `/users/${user.id}/flats/`;
+
+        // We take the reference on the very first search (it takes time between init and user created)
+        if (this.until === undefined) {
+            this.until = new Date();
+        }
 
         if (nextQueryAfter) {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
