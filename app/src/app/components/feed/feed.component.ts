@@ -6,7 +6,7 @@ import {DragulaService} from 'ng2-dragula';
 import {Observable, Subscription} from 'rxjs';
 import {filter, take} from 'rxjs/operators';
 
-import {Flat} from '../../model/flat';
+import {UserFlat} from '../../model/user.flat';
 
 import {FlatsService} from '../../services/flats/flats.service';
 
@@ -21,7 +21,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
-    flats$: Observable<Flat[]>;
+    flats$: Observable<UserFlat[]>;
 
     loaded = false;
 
@@ -76,7 +76,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.flatsService.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: Flat[]) => {
+        this.flatsService.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
             this.loaded = true;
         });
     }
@@ -102,7 +102,7 @@ export class FeedComponent implements OnInit, OnDestroy {
         return toDateObj(flatDate);
     }
 
-    open(flat: Flat) {
+    open(flat: UserFlat) {
         if (this.cardBackToOrigin) {
             this.cardBackToOrigin = !this.cardBackToOrigin;
             return;

@@ -4,7 +4,7 @@ import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} fro
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
-import {Flat, FlatData} from '../../model/flat';
+import {UserFlat, UserFlatData} from '../../model/user.flat';
 import {User} from '../../model/user';
 
 import {UserService} from '../user/user.service';
@@ -14,10 +14,10 @@ import {UserService} from '../user/user.service';
 })
 export class FlatsService {
 
-    private flatsSubject: BehaviorSubject<Flat[] | undefined> = new BehaviorSubject(undefined);
+    private flatsSubject: BehaviorSubject<UserFlat[] | undefined> = new BehaviorSubject(undefined);
     private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    private nextQueryAfter: QueryDocumentSnapshot<FlatData>;
+    private nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
     private queryLimit = 2;
 
     private paginationSubscription: Subscription;
@@ -45,7 +45,7 @@ export class FlatsService {
         }
     }
 
-    watchFlats(): Observable<Flat[]> {
+    watchFlats(): Observable<UserFlat[]> {
         return this.flatsSubject.asObservable();
     }
 
@@ -56,12 +56,12 @@ export class FlatsService {
     find() {
         try {
             this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
-                const collection: AngularFirestoreCollection<FlatData> = this.getCollectionQuery(user);
+                const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user);
 
                 this.unsubscribe();
 
                 this.paginationSubscription = collection.get().subscribe(async (first) => {
-                    this.nextQueryAfter = first.docs[first.docs.length - 1] as QueryDocumentSnapshot<FlatData>;
+                    this.nextQueryAfter = first.docs[first.docs.length - 1] as QueryDocumentSnapshot<UserFlatData>;
 
                     await this.query(collection);
                 });
@@ -71,28 +71,30 @@ export class FlatsService {
         }
     }
 
-    private getCollectionQuery(user: User): AngularFirestoreCollection<FlatData> {
+    private getCollectionQuery(user: User): AngularFirestoreCollection<UserFlatData> {
         const collectionName = `/users/${user.id}/flats/`;
 
         if (this.nextQueryAfter) {
-            return this.fireStore.collection<FlatData>(collectionName, ref =>
-                ref.orderBy('created_at', 'desc')
+            return this.fireStore.collection<UserFlatData>(collectionName, ref =>
+                ref.where('status', '==', 'new')
+                    .orderBy('created_at', 'desc')
                     .startAfter(this.nextQueryAfter)
                     .limit(this.queryLimit));
         } else {
-            return this.fireStore.collection<FlatData>(collectionName, ref =>
-                ref.orderBy('created_at', 'desc')
+            return this.fireStore.collection<UserFlatData>(collectionName, ref =>
+                ref.where('status', '==', 'new')
+                    .orderBy('created_at', 'desc')
                     .limit(this.queryLimit));
         }
     }
 
-    private query(collection: AngularFirestoreCollection<FlatData>): Promise<void> {
+    private query(collection: AngularFirestoreCollection<UserFlatData>): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             try {
                 this.findSubscription = collection.snapshotChanges().pipe(
                     map(actions => {
                         return actions.map(a => {
-                            const data: FlatData = a.payload.doc.data() as FlatData;
+                            const data: UserFlatData = a.payload.doc.data() as UserFlatData;
                             const id = a.payload.doc.id;
                             const ref = a.payload.doc.ref;
 
@@ -103,7 +105,7 @@ export class FlatsService {
                             };
                         });
                     })
-                ).subscribe(async (flats: Flat[]) => {
+                ).subscribe(async (flats: UserFlat[]) => {
                     await this.addFlats(flats);
 
                     resolve();
@@ -114,7 +116,7 @@ export class FlatsService {
         });
     }
 
-    private addFlats(flats: Flat[]): Promise<void> {
+    private addFlats(flats: UserFlat[]): Promise<void> {
         return new Promise<void>((resolve) => {
             if (!flats || flats.length <= 0) {
                 this.lastPageReached.next(true);
@@ -123,7 +125,7 @@ export class FlatsService {
                 return;
             }
 
-            this.flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: Flat[]) => {
+            this.flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: UserFlat[]) => {
                 this.flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
 
                 resolve();

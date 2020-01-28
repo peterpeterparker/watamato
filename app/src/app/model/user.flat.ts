@@ -1,6 +1,6 @@
 import {DocumentReference} from '@angular/fire/firestore';
 
-export interface FlatData {
+export interface UserFlatData {
     url: string | null;
     image_url: string | null;
     title: string | null;
@@ -11,13 +11,15 @@ export interface FlatData {
 
     source: 'ronorp';
 
+    status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner';
+
     created_at: firebase.firestore.Timestamp;
     updated_at: firebase.firestore.Timestamp;
 }
 
-export interface Flat {
+export interface UserFlat {
     id: string;
     ref: DocumentReference;
 
-    data: FlatData;
+    data: UserFlatData;
 }
