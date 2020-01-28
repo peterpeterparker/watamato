@@ -28,6 +28,8 @@ function createOrMerge(flatData: FlatData | undefined): Promise<void> {
             } else {
                 await merge(flat.id, flatData);
             }
+
+            resolve();
         } catch (err) {
             reject(err);
         }

@@ -6,6 +6,7 @@ app.firestore().settings({timestampsInSnapshots: true});
 
 import {crawlImmo} from './crawler/crawler';
 import {watchUserCreate} from './user/watch-user';
+import {watchFlatCreate} from './flat/watch-flat';
 
 const runtimeOpts = {
     timeoutSeconds: 240,
@@ -15,3 +16,5 @@ const runtimeOpts = {
 export const crawl = functions.runWith(runtimeOpts).https.onRequest(crawlImmo);
 
 export const userCreate = functions.auth.user().onCreate(watchUserCreate);
+
+export const flatCreate = functions.firestore.document('flats/{flatId}').onCreate(watchFlatCreate);

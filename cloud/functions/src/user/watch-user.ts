@@ -5,6 +5,8 @@ import {Flat} from '../model/flat';
 
 import {add, findAll} from '../utils/flats.utils';
 
+import {createUser} from '../utils/users.utils';
+
 export async function watchUserCreate(userRecord: admin.auth.UserRecord, _context: EventContext) {
     await cloneFlats(userRecord);
 }
@@ -22,10 +24,12 @@ async function cloneFlats(userRecord: admin.auth.UserRecord) {
         }
 
         const promises: Promise<void>[] = flats.map((flat: Flat) => {
-            return add(`/flats/${userRecord.uid}/`, flat.data);
+            return add(`/users/${userRecord.uid}/flats/`, flat.data);
         });
 
         await Promise.all(promises);
+
+        await createUser(userRecord);
     } catch (err) {
         console.error(err);
     }

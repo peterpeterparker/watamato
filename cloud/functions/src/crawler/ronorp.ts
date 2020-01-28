@@ -17,11 +17,53 @@ export async function crawlRonorp(): Promise<FlatData[] | undefined> {
     await goToWohnung(page);
     await filterSearch(page);
 
-    const elements: FlatData[] | undefined = await findElements(page);
+    let elements: FlatData[] | undefined = await findElements(page);
+
+    // There might be some flats on next page
+    // We don't iterate further, that should be enough according the search limitation
+    if (allElementsPublishedToday(elements)) {
+        try {
+            const index: number = 2;
+            await page.waitForSelector(`a[data-value="${index}"]`, {timeout: 500});
+
+            await goNextPage(page, 2);
+
+            const nextElements: FlatData[] | undefined = await findElements(page);
+
+            if (nextElements !== undefined && nextElements.length > 0) {
+                elements = [...elements as FlatData[], ...nextElements];
+            }
+        } catch (error) {
+            // There is nothing to paginate, all results are on first page
+        }
+    }
 
     await browser.close();
 
     return elements;
+}
+
+function allElementsPublishedToday(elements: FlatData[] | undefined): boolean {
+    if (!elements || elements === undefined || elements.length <= 0) {
+        return true;
+    }
+
+    const today: Date = new Date();
+    const notTodayElements: FlatData[] = elements.filter((element: FlatData) => {
+        return element.published_at.getDate() !== today.getDate() ||
+            element.published_at.getMonth() !== today.getMonth() ||
+            element.published_at.getFullYear() !== today.getFullYear()
+    });
+
+    return (!notTodayElements || notTodayElements.length <= 0);
+}
+
+async function goNextPage(page: Page, index: number) {
+    await page.evaluate((selector) => document.querySelector(selector).click(), `a[data-value="${index}"]`);
+
+    await page.waitForNavigation({
+        waitUntil: 'networkidle0',
+    });
 }
 
 async function findElements(page: Page): Promise<FlatData[] | undefined> {
@@ -29,7 +71,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
     page.on('console', consoleObj => console.log(consoleObj.text()));
 
-    const elements: string[] = await page.evaluate(() => [...document.querySelectorAll('div.inserate')].map(div => div.innerHTML));
+    const elements: string[] = await page.evaluate(() => [...document.querySelectorAll('div.short_advert.inserate')].map(div => div.innerHTML));
 
     if (!elements || elements.length <= 0) {
         return undefined;
@@ -39,11 +81,13 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
     const results: FlatData[] = elements.filter((element: string) => {
         const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
-        const dateChild = dom.window.document.querySelector('div.user div.pull-left');
+        // const dateChild = dom.window.document.querySelector('div.user div.pull-left');
 
         const link = dom.window.document.querySelector('a.image-wrapper');
 
-        return link && filterPlz(dom) && dateChild && dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g);
+        // TODO filterPLZ and date -> reactivate
+        // return link && filterPlz(dom) && dateChild && dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g);
+        return link !== undefined;
 
         // Match a date example
         // return dateChild && dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
@@ -65,9 +109,12 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
         }
 
         const today: Date = new Date();
-        if (time && time.innerHTML) {
+        if (time && time.innerHTML && time.innerHTML.indexOf(':') > -1) {
             today.setHours(parseInt(time.innerHTML.split(':')[0]));
             today.setMinutes(parseInt(time.innerHTML.split(':')[1]));
+        } else if (time && time.innerHTML && time.innerHTML.indexOf('.') > -1) {
+            today.setDate(parseInt(time.innerHTML.split('.')[0]));
+            today.setMonth(parseInt(time.innerHTML.split('.')[1]));
         }
 
         let url: string | null = null;
@@ -83,14 +130,16 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
             location: info && info.length > 0 && info[0] ? info[0].replace('Ort:', '').trim() : null,
             rooms: info && info.length > 1 && info[1] ? parseFloat(info[1].replace('Zimmer:', '').trim()) : 0,
             price: price,
-            published_at: today
+            published_at: today,
+            source: 'ronorp'
         }
     });
 
     return results;
 }
 
-function filterPlz(dom: JSDOM): boolean {
+// TODO rm export
+export function filterPlz(dom: JSDOM): boolean {
     const content = dom.window.document.querySelector('div.text_content p.special_data');
 
     if (!content) {

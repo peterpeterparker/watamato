@@ -1,6 +1,6 @@
-import {firestore} from 'firebase-admin';
+import {DocumentReference} from '@angular/fire/firestore';
 
-interface FlatData {
+export interface FlatData {
     url: string | null;
     image_url: string | null;
     title: string | null;
@@ -11,13 +11,13 @@ interface FlatData {
 
     source: 'ronorp';
 
-    created_at?: firestore.Timestamp;
-    updated_at?: firestore.Timestamp;
+    created_at: firebase.firestore.Timestamp;
+    updated_at: firebase.firestore.Timestamp;
 }
 
-interface Flat {
+export interface Flat {
     id: string;
-    ref: firestore.DocumentReference;
+    ref: DocumentReference;
 
     data: FlatData;
 }

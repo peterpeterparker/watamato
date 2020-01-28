@@ -1,0 +1,9 @@
+ion-router-outlet {
+  ion-content {
+    --ion-background-color: #0079bf;
+
+    main {
+      overflow: scroll;
+    }
+  }
+}
