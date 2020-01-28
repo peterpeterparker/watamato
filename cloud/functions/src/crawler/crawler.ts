@@ -1,11 +1,7 @@
 import * as functions from 'firebase-functions';
 import {Request} from 'firebase-functions/lib/providers/https';
 
-import {crawlRonorp} from './ronorp';
-
-import {FlatData} from '../model/flat';
-
-import {save} from '../utils/flats.utils';
+import {isScheduled, schedule} from '../utils/tasks.utils';
 
 export async function crawlImmo(request: Request, response: any) {
     const isValidBearer: boolean = await validBearer(request);
@@ -16,14 +12,14 @@ export async function crawlImmo(request: Request, response: any) {
     }
 
     try {
-        const elements: FlatData[] | undefined = await crawlRonorp();
+        const scheduled: boolean = await isScheduled();
 
-        await save(elements);
+        if (!scheduled) {
+            await schedule();
+        }
 
-        response.json({result: `Crawl done. ${elements ? elements.length : 0} elements found.`});
+        response.json({result: `Crawl scheduled.`});
     } catch (err) {
-        console.error(err);
-
         response.status(500).json({error: err});
     }
 }

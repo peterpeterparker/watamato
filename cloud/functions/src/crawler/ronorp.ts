@@ -134,7 +134,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
     return results;
 }
 
-export function filterPlz(dom: JSDOM): boolean {
+function filterPlz(dom: JSDOM): boolean {
     const content = dom.window.document.querySelector('div.text_content p.special_data');
 
     if (!content) {
