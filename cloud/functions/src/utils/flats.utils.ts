@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 
 import {Flat, FlatData} from '../model/flat';
+import {UserFlatData} from '../model/user.flat';
 
 export async function save(flats: FlatData[] | undefined) {
     try {
@@ -36,7 +37,7 @@ function createOrMerge(flatData: FlatData | undefined): Promise<void> {
     });
 }
 
-export function add(collectionPath: string, flatData: FlatData | undefined): Promise<void> {
+export function add(collectionPath: string, flatData: FlatData | UserFlatData | undefined): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
         try {
             if (!flatData || flatData === undefined) {

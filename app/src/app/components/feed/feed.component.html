@@ -1,44 +1,55 @@
 <ng-container *ngIf="loaded; else feedLoading;">
   <main>
     <section>
-      <ion-label class="column-title">Incoming</ion-label>
+      <ion-label class="column-title">New</ion-label>
 
-      <ion-card *ngFor="let flat of (flats$ | async);" mode="md" [href]="flat.data.url" target="_blank">
-        <img [src]="flat.data.image_url" [class.ronorp]="flat.data.source === 'ronorp'"/>
-
-        <ion-badge>Ronorp</ion-badge>
-
-        <ion-card-header>
-          <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
-          <ion-card-title>{{flat.data.title}}</ion-card-title>
-        </ion-card-header>
-
-        <ion-card-content>
-          <p>{{flat.data.rooms}} rooms</p>
-          <p>{{flat.data.location}}</p>
-          <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
-        </ion-card-content>
-      </ion-card>
+      <div dragula="bag" [attr.status]="'new'">
+        <ion-card *ngFor="let flat of (flatsNew$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+          <app-flat [flat]="flat"></app-flat>
+        </ion-card>
+      </div>
     </section>
 
     <section>
       <ion-label class="column-title">Dislike</ion-label>
+
+      <div dragula="bag" [attr.status]="'disliked'">
+        <ion-card *ngFor="let flat of (flatsDisliked$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+          <app-flat [flat]="flat"></app-flat>
+        </ion-card>
+      </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Sightseeing</ion-label>
+      <ion-label class="column-title">Viewings</ion-label>
+
+      <div dragula="bag" [attr.status]="'viewings'">
+
+      </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Applied for</ion-label>
+      <ion-label class="column-title">Applications</ion-label>
+
+      <div dragula="bag" [attr.status]="'applied'">
+
+      </div>
     </section>
 
     <section>
       <ion-label class="column-title">Rejected</ion-label>
+
+      <div dragula="bag" [attr.status]="'rejected'">
+
+      </div>
     </section>
 
     <section>
       <ion-label class="column-title">Winner</ion-label>
+
+      <div dragula="bag" [attr.status]="'winner'">
+
+      </div>
     </section>
   </main>
 

@@ -1,0 +1,30 @@
+body {
+  ion-card[class*="sc-ion-card-md"] {
+    background: white;
+    --background: white;
+
+    cursor: pointer;
+
+    ion-badge {
+      margin: 16px 16px 0;
+      padding: 2px 8px;
+      font-weight: 300;
+
+      &.ronorp {
+        background: #d55e8b;
+      }
+    }
+
+    ion-card-subtitle, p {
+      font-size: 0.8rem;
+    }
+
+    ion-card-title {
+      font-size: 1rem;
+    }
+
+    &:last-of-type {
+      margin-bottom: 32px;
+    }
+  }
+}

@@ -2,6 +2,7 @@ import {EventContext} from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
 import {Flat} from '../model/flat';
+import {UserFlatData} from '../model/user.flat';
 
 import {add, findAll} from '../utils/flats.utils';
 
@@ -24,7 +25,12 @@ async function cloneFlats(userRecord: admin.auth.UserRecord) {
         }
 
         const promises: Promise<void>[] = flats.map((flat: Flat) => {
-            return add(`/users/${userRecord.uid}/flats/`, flat.data);
+            const userFlatData: UserFlatData = {
+                ...flat.data,
+                status: 'new'
+            };
+
+            return add(`/users/${userRecord.uid}/flats/`, userFlatData);
         });
 
         await Promise.all(promises);

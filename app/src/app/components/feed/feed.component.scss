@@ -18,35 +18,19 @@ main {
     background: var(--ion-color-light);
     border-radius: 3px;
 
+    div[status] {
+      min-height: 100vh;
+    }
+
     ion-label.column-title {
       padding: 8px 16px 0;
       font-weight: 500;
     }
+  }
+}
 
-    ion-card {
-      background: white;
-
-      ion-badge {
-        margin: 16px 16px 0;
-        padding: 2px 8px;
-        font-weight: 300;
-
-        &.ronorp {
-          background: #d55e8b;
-        }
-      }
-
-      ion-card-subtitle, p {
-        font-size: 0.8rem;
-      }
-
-      ion-card-title {
-        font-size: 1rem;
-      }
-
-      &:last-of-type {
-        margin-bottom: 32px;
-      }
-    }
+ion-infinite-scroll {
+  ion-infinite-scroll-content {
+    --color: var(--ion-color-light);
   }
 }

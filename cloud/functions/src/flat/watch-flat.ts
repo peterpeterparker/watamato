@@ -6,6 +6,7 @@ import {User} from '../model/user';
 
 import {findAllUsers} from '../utils/users.utils';
 import {add} from '../utils/flats.utils';
+import {UserFlatData} from '../model/user.flat';
 
 export async function watchFlatCreate(snapshot: DocumentSnapshot, _context: EventContext) {
     await cloneFlat(snapshot);
@@ -26,7 +27,12 @@ async function cloneFlat(snap: DocumentSnapshot) {
         }
 
         const promises: Promise<void>[] = users.map((user: User) => {
-            return add(`/users/${user.id}/flats/`, flatData);
+            const userFlatData: UserFlatData = {
+                ...flatData,
+                status: 'new'
+            };
+
+            return add(`/users/${user.id}/flats/`, userFlatData);
         });
 
         await Promise.all(promises);
