@@ -1,9 +1,9 @@
 <ng-container *ngIf="loaded; else feedLoading;">
   <main>
     <section>
-      <ion-label class="column-title">Incoming</ion-label>
+      <ion-label class="column-title">New</ion-label>
 
-      <div dragula="bag" [attr.status]="'incoming'">
+      <div dragula="bag" [attr.status]="'new'">
         <ion-card *ngFor="let flat of (flats$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
           <img [src]="flat.data.image_url" [class.ronorp]="flat.data.source === 'ronorp'"/>
 
@@ -32,15 +32,15 @@
     </section>
 
     <section>
-      <ion-label class="column-title">Sightseeing</ion-label>
+      <ion-label class="column-title">Viewings</ion-label>
 
-      <div dragula="bag" [attr.status]="'sightseeing'">
+      <div dragula="bag" [attr.status]="'viewings'">
 
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Applied for</ion-label>
+      <ion-label class="column-title">Applications</ion-label>
 
       <div dragula="bag" [attr.status]="'applied'">
 
