@@ -9,6 +9,10 @@ import {AuthService} from './services/auth/auth.service';
 import {UserService} from './services/user/user.service';
 import {FlatsNewService} from './services/flats/flats.new.service';
 import {FlatsDislikedService} from './services/flats/flats.disliked.service';
+import {FlatsAppliedService} from './services/flats/flats.applied.service';
+import {FlatsViewingService} from './services/flats/flats.viewing.service';
+import {FlatsRejectedService} from './services/flats/flats.rejected.service';
+import {FlatsWinningService} from './services/flats/flats.winning.service';
 
 @Component({
     selector: 'app-root',
@@ -23,6 +27,10 @@ export class AppComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private flatsNewService: FlatsNewService,
         private flatsDislikedService: FlatsDislikedService,
+        private flatsAppliedService: FlatsAppliedService,
+        private flatsViewingService: FlatsViewingService,
+        private flatsRejectedService: FlatsRejectedService,
+        private flatsWinningService: FlatsWinningService,
         private userService: UserService
     ) {
         this.initializeApp();
@@ -38,16 +46,21 @@ export class AppComponent implements OnInit, OnDestroy {
     async ngOnInit() {
         await this.authService.anonymousLogin();
 
-        await this.flatsNewService.init();
-        await this.flatsDislikedService.init();
+        const promises: Promise<void>[] = [
+            this.flatsNewService.init(),
+            this.flatsDislikedService.init(),
+            this.flatsAppliedService.init(),
+            this.flatsViewingService.init(),
+            this.flatsRejectedService.init(),
+            this.flatsWinningService.init()
+        ];
+
+        await Promise.all(promises);
 
         this.userService.init();
     }
 
-    ngOnDestroy() {
-        this.flatsNewService.destroy();
-        this.flatsDislikedService.destroy();
-
+    async ngOnDestroy() {
         this.userService.destroy();
     }
 }

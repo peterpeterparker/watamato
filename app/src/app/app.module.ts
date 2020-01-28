@@ -26,7 +26,7 @@ import {DragulaModule} from 'ng2-dragula';
         AppRoutingModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
-        AngularFirestoreModule.enablePersistence(),
+        AngularFirestoreModule,
         DragulaModule.forRoot()
     ],
     providers: [

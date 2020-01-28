@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 
-import {Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
 import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
@@ -12,7 +12,6 @@ import {UserService} from '../user/user.service';
 
 export interface FindFlats {
     nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
-    paginationSubscription: Subscription;
     query: Observable<UserFlat[]>;
 }
 
@@ -22,24 +21,22 @@ export interface FindFlats {
 export class FlatsService {
 
     private queryLimit = 2;
+    private until: Date = new Date();
 
     constructor(private fireStore: AngularFirestore,
                 private userService: UserService) {
     }
 
-    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, until: Date, find: (result: FindFlats) => void, unsubscribe: () => void) {
+    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, find: (result: FindFlats) => void) {
         try {
             this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
-                const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status, until);
+                const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status);
 
-                unsubscribe();
-
-                const paginationSubscription: Subscription = collection.get().subscribe(async (first) => {
+                collection.get().pipe(take(1)).subscribe(async (first) => {
                     nextQueryAfter = first.docs[first.docs.length - 1] as QueryDocumentSnapshot<UserFlatData>;
 
                     find({
                         nextQueryAfter,
-                        paginationSubscription,
                         query: this.query(collection, nextQueryAfter)
                     });
                 });
@@ -49,20 +46,20 @@ export class FlatsService {
         }
     }
 
-    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, until: Date): AngularFirestoreCollection<UserFlatData> {
+    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus): AngularFirestoreCollection<UserFlatData> {
         const collectionName = `/users/${user.id}/flats/`;
 
         if (nextQueryAfter) {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
                 ref.where('status', '==', status)
-                    .where('updated_at', '<', until)
+                    .where('updated_at', '<', this.until)
                     .orderBy('updated_at', 'desc')
                     .startAfter(nextQueryAfter)
                     .limit(this.queryLimit));
         } else {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
                 ref.where('status', '==', status)
-                    .where('updated_at', '<', until)
+                    .where('updated_at', '<', this.until)
                     .orderBy('updated_at', 'desc')
                     .limit(this.queryLimit));
         }
@@ -84,5 +81,22 @@ export class FlatsService {
                 });
             })
         );
+    }
+
+    addFlats(flats: UserFlat[], flatsSubject: BehaviorSubject<UserFlat[] | undefined>, lastPageReached: BehaviorSubject<boolean>): Promise<void> {
+        return new Promise<void>((resolve) => {
+            if (!flats || flats.length <= 0) {
+                lastPageReached.next(true);
+
+                resolve();
+                return;
+            }
+
+            flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: UserFlat[]) => {
+                flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
+
+                resolve();
+            });
+        });
     }
 }

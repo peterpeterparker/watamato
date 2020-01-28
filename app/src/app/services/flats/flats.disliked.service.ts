@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {QueryDocumentSnapshot} from '@angular/fire/firestore';
 
-import {BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
 import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
@@ -21,31 +21,12 @@ export class FlatsDislikedService implements FlatsServiceInterface {
 
     private nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
 
-    private paginationSubscription: Subscription;
-    private findSubscription: Subscription;
-
-    private until: Date = new Date();
-
     constructor(private flatsService: FlatsService) {
 
     }
 
     async init() {
         await this.find();
-    }
-
-    destroy() {
-        this.unsubscribe();
-    }
-
-    private unsubscribe() {
-        if (this.paginationSubscription) {
-            this.paginationSubscription.unsubscribe();
-        }
-
-        if (this.findSubscription) {
-            this.findSubscription.unsubscribe();
-        }
     }
 
     watchFlats(): Observable<UserFlat[]> {
@@ -63,34 +44,16 @@ export class FlatsDislikedService implements FlatsServiceInterface {
     async find() {
         this.lastPageReached.pipe(take(1)).subscribe(async (reached: boolean) => {
             if (!reached) {
-                await this.flatsService.find(this.nextQueryAfter, this.status(), this.until, this.findFlats, () => this.unsubscribe());
+                await this.flatsService.find(this.nextQueryAfter, this.status(), this.findFlats);
             }
         });
     }
 
     private findFlats = async (result: FindFlats) => {
         this.nextQueryAfter = result.nextQueryAfter;
-        this.paginationSubscription = result.paginationSubscription;
 
-        result.query.subscribe(async (flats: UserFlat[]) => {
-            await this.addFlats(flats);
+        result.query.pipe(take(1)).subscribe(async (flats: UserFlat[]) => {
+            await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
         });
     };
-
-    private addFlats(flats: UserFlat[]): Promise<void> {
-        return new Promise<void>((resolve) => {
-            if (!flats || flats.length <= 0) {
-                this.lastPageReached.next(true);
-
-                resolve();
-                return;
-            }
-
-            this.flatsSubject.asObservable().pipe(take(1)).subscribe((currentFlats: UserFlat[]) => {
-                this.flatsSubject.next(currentFlats !== undefined ? [...currentFlats, ...flats] : [...flats]);
-
-                resolve();
-            });
-        });
-    }
 }

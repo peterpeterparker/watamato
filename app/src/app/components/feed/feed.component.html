@@ -28,8 +28,10 @@
       <div>
         <ion-label class="column-title">Viewings</ion-label>
 
-        <div dragula="bag" [attr.status]="'viewings'">
-
+        <div dragula="bag" [attr.status]="'viewing'">
+          <ion-card *ngFor="let flat of (flatsViewing$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
         </div>
       </div>
     </section>
@@ -39,7 +41,9 @@
         <ion-label class="column-title">Applications</ion-label>
 
         <div dragula="bag" [attr.status]="'applied'">
-
+          <ion-card *ngFor="let flat of (flatsApplied$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
         </div>
       </div>
     </section>
@@ -49,7 +53,9 @@
         <ion-label class="column-title">Rejected</ion-label>
 
         <div dragula="bag" [attr.status]="'rejected'">
-
+          <ion-card *ngFor="let flat of (flatsRejected$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
         </div>
       </div>
     </section>
@@ -58,8 +64,10 @@
       <div>
         <ion-label class="column-title">Winner</ion-label>
 
-        <div dragula="bag" [attr.status]="'winner'">
-
+        <div dragula="bag" [attr.status]="'winning'">
+          <ion-card *ngFor="let flat of (flatsWinning$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
         </div>
       </div>
     </section>
