@@ -3,14 +3,14 @@ import {IonInfiniteScroll} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
-import {Observable, Subscription} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
+import {Subject, Subscription} from 'rxjs';
+import {filter, take, takeUntil} from 'rxjs/operators';
 
 import {UserFlat} from '../../model/user.flat';
 
 import {FlatsNewService} from '../../services/flats/flats.new.service';
-
-import {toDateObj} from '../../utils/date.utils';
+import {FlatsDislikedService} from '../../services/flats/flats.disliked.service';
+import {FlatsServiceInterface} from '../../services/flats/flats.service.interface';
 
 @Component({
     selector: 'app-feed',
@@ -21,11 +21,12 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
-    flats$: Observable<UserFlat[]>;
-
     loaded = false;
 
-    private lastPageReachedSubscription: Subscription;
+    private statusLoaded: ('new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner')[] = [];
+    private statusLastPageReached: ('new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner')[] = [];
+
+    private unsubscribeLastPageReached: Subject<void> = new Subject();
 
     private dragulaSubscription: Subscription = new Subscription();
 
@@ -34,7 +35,8 @@ export class FeedComponent implements OnInit, OnDestroy {
     private cardBackToOrigin = false;
 
     constructor(private dragulaService: DragulaService,
-                private flatsNewService: FlatsNewService) {
+                private flatsNewService: FlatsNewService,
+                private flatsDislikedService: FlatsDislikedService) {
 
         this.dragulaSubscription.add(dragulaService.drag('bag')
             .subscribe(({el}) => {
@@ -66,25 +68,43 @@ export class FeedComponent implements OnInit, OnDestroy {
         );
     }
 
-    async ngOnInit() {
-        this.flats$ = this.flatsNewService.watchFlats();
+    ngOnInit() {
+        this.watchLoad(this.flatsNewService);
+        this.watchLoad(this.flatsDislikedService);
 
-        this.lastPageReachedSubscription = this.flatsNewService.watchLastPageReached().subscribe((reached: boolean) => {
-            if (reached && this.infiniteScroll) {
-                this.loaded = true;
-                this.infiniteScroll.disabled = true;
-            }
-        });
+        this.watchLastPageReached(this.flatsNewService);
+        this.watchLastPageReached(this.flatsDislikedService);
+    }
 
-        this.flatsNewService.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
-            this.loaded = true;
+    private watchLoad(service: FlatsServiceInterface) {
+        service.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
+            this.initLoaded(service);
         });
     }
 
+    private watchLastPageReached(service: FlatsServiceInterface) {
+        service.watchLastPageReached()
+            .pipe(takeUntil(this.unsubscribeLastPageReached.asObservable()))
+            .subscribe((reached: boolean) => {
+                if (reached) {
+                    this.statusLastPageReached.push(service.status());
+
+                    if (this.statusLoaded.indexOf(service.status()) === -1) {
+                        this.initLoaded(service);
+                    }
+
+                    // TODO
+                    if (this.statusLastPageReached.length >= 2 && this.infiniteScroll) {
+                        this.loaded = true;
+                        this.infiniteScroll.disabled = true;
+                    }
+                }
+            });
+    }
+
     ngOnDestroy() {
-        if (this.lastPageReachedSubscription) {
-            this.lastPageReachedSubscription.unsubscribe();
-        }
+        this.unsubscribeLastPageReached.next();
+        this.unsubscribeLastPageReached.complete();
 
         if (this.dragulaSubscription) {
             this.dragulaSubscription.unsubscribe();
@@ -98,10 +118,6 @@ export class FeedComponent implements OnInit, OnDestroy {
         }, 500);
     }
 
-    toDateObj(flatDate): Date {
-        return toDateObj(flatDate);
-    }
-
     open(flat: UserFlat) {
         if (this.cardBackToOrigin) {
             this.cardBackToOrigin = !this.cardBackToOrigin;
@@ -111,4 +127,10 @@ export class FeedComponent implements OnInit, OnDestroy {
         window.open(flat.data.url, '_blank');
     }
 
+    private initLoaded(service: FlatsServiceInterface) {
+        this.statusLoaded.push(service.status());
+
+        // TODO
+        this.loaded = this.statusLoaded.length >= 2;
+    }
 }

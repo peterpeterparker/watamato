@@ -26,10 +26,10 @@ export class FlatsService {
                 private userService: UserService) {
     }
 
-    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, find: (result: FindFlats) => void, unsubscribe: () => void) {
+    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner', find: (result: FindFlats) => void, unsubscribe: () => void) {
         try {
             this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
-                const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter);
+                const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status);
 
                 unsubscribe();
 
@@ -48,18 +48,18 @@ export class FlatsService {
         }
     }
 
-    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>): AngularFirestoreCollection<UserFlatData> {
+    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner'): AngularFirestoreCollection<UserFlatData> {
         const collectionName = `/users/${user.id}/flats/`;
 
         if (nextQueryAfter) {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
-                ref.where('status', '==', 'new')
+                ref.where('status', '==', status)
                     .orderBy('created_at', 'desc')
                     .startAfter(nextQueryAfter)
                     .limit(this.queryLimit));
         } else {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
-                ref.where('status', '==', 'new')
+                ref.where('status', '==', status)
                     .orderBy('created_at', 'desc')
                     .limit(this.queryLimit));
         }

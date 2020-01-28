@@ -6,6 +6,7 @@ import {IonicModule} from '@ionic/angular';
 import {DragulaModule} from 'ng2-dragula';
 
 import {FeedComponent} from './feed.component';
+import {FlatModule} from '../flat/flat.module';
 
 @NgModule({
     declarations: [
@@ -14,7 +15,8 @@ import {FeedComponent} from './feed.component';
     imports: [
         CommonModule,
         IonicModule,
-        DragulaModule
+        DragulaModule,
+        FlatModule
     ],
     exports: [
         FeedComponent

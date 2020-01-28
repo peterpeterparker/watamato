@@ -14,7 +14,7 @@ import {FlatsServiceInterface} from './flats.service.interface';
 @Injectable({
     providedIn: 'root'
 })
-export class FlatsNewService implements FlatsServiceInterface {
+export class FlatsDislikedService implements FlatsServiceInterface {
 
     private flatsSubject: BehaviorSubject<UserFlat[] | undefined> = new BehaviorSubject(undefined);
     private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -55,7 +55,7 @@ export class FlatsNewService implements FlatsServiceInterface {
     }
 
     status(): 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner' {
-        return 'new';
+        return 'disliked';
     }
 
     async find() {

@@ -4,30 +4,19 @@
       <ion-label class="column-title">New</ion-label>
 
       <div dragula="bag" [attr.status]="'new'">
-        <ion-card *ngFor="let flat of (flats$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-          <img [src]="flat.data.image_url"/>
-
-          <ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
-
-          <ion-card-header>
-            <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
-            <ion-card-title>{{flat.data.title}}</ion-card-title>
-          </ion-card-header>
-
-          <ion-card-content>
-            <p>{{flat.data.rooms}} rooms</p>
-            <p>{{flat.data.location}}</p>
-            <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
-          </ion-card-content>
-        </ion-card>
+        <app-flat [status]="'new'"
+                  (open)="open($event)"
+                  (lastPageReached)="lastPageReached($event)"></app-flat>
       </div>
     </section>
 
     <section>
       <ion-label class="column-title">Dislike</ion-label>
 
-      <div dragula="bag" [attr.status]="'dislike'">
-
+      <div dragula="bag" [attr.status]="'disliked'">
+        <app-flat [status]="'disliked'"
+                  (open)="open($event)"
+                  (lastPageReached)="lastPageReached($event)"></app-flat>
       </div>
     </section>
 
