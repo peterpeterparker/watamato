@@ -147,8 +147,16 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     async findNext($event) {
         setTimeout(async () => {
-            await this.flatsNewService.find();
-            await this.flatsDislikedService.find();
+            const promises: Promise<void>[] = [
+                this.flatsNewService.find(),
+                this.flatsDislikedService.find(),
+                this.flatsAppliedService.find(),
+                this.flatsViewingService.find(),
+                this.flatsRejectedService.find(),
+                this.flatsWinningService.find()
+            ];
+
+            await Promise.all(promises);
 
             $event.target.complete();
         }, 500);
