@@ -12,6 +12,10 @@ import {FlatsNewService} from '../../services/flats/flats.new.service';
 import {FlatsDislikedService} from '../../services/flats/flats.disliked.service';
 import {FlatsServiceInterface} from '../../services/flats/flats.service.interface';
 import {UserFlatsService} from '../../services/user/user.flats.service';
+import {FlatsAppliedService} from '../../services/flats/flats.applied.service';
+import {FlatsRejectedService} from '../../services/flats/flats.rejected.service';
+import {FlatsViewingService} from '../../services/flats/flats.viewing.service';
+import {FlatsWinningService} from '../../services/flats/flats.winning.service';
 
 @Component({
     selector: 'app-feed',
@@ -24,6 +28,10 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     flatsNew$: Observable<UserFlat[]>;
     flatsDisliked$: Observable<UserFlat[]>;
+    flatsViewing$: Observable<UserFlat[]>;
+    flatsApplied$: Observable<UserFlat[]>;
+    flatsRejected$: Observable<UserFlat[]>;
+    flatsWinning$: Observable<UserFlat[]>;
 
     loaded = false;
 
@@ -34,14 +42,17 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     private dragulaSubscription: Subscription = new Subscription();
 
-    // If a card is moved and then put back to its origin, then a click will be triggered.
-    // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
-    private cardBackToOrigin = false;
+    private statusLength = Object.keys(UserFlatStatus).length;
 
+    // If a card is moved and then put back to its origin, then a click will be triggered.
     constructor(private dragulaService: DragulaService,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
-                private flatsDislikedService: FlatsDislikedService) {
+                private flatsDislikedService: FlatsDislikedService,
+                private flatsAppliedService: FlatsAppliedService,
+                private flatsViewingService: FlatsViewingService,
+                private flatsRejectedService: FlatsRejectedService,
+                private flatsWinningService: FlatsWinningService) {
 
         this.dragulaSubscription.add(dragulaService.drag('bag')
             .subscribe(({el}) => {
@@ -71,24 +82,42 @@ export class FeedComponent implements OnInit, OnDestroy {
         );
     }
 
-    ngOnInit() {
+    // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
+    private cardBackToOrigin = false;
+
+    async ngOnInit() {
         this.flatsNew$ = this.flatsNewService.watchFlats();
         this.flatsDisliked$ = this.flatsDislikedService.watchFlats();
+        this.flatsViewing$ = this.flatsViewingService.watchFlats();
+        this.flatsApplied$ = this.flatsAppliedService.watchFlats();
+        this.flatsRejected$ = this.flatsRejectedService.watchFlats();
+        this.flatsWinning$ = this.flatsWinningService.watchFlats();
 
-        this.watchLoad(this.flatsNewService);
-        this.watchLoad(this.flatsDislikedService);
+        const promises: Promise<void>[] = [
+            this.watchLoad(this.flatsNewService),
+            this.watchLoad(this.flatsDislikedService),
+            this.watchLoad(this.flatsAppliedService),
+            this.watchLoad(this.flatsViewingService),
+            this.watchLoad(this.flatsRejectedService),
+            this.watchLoad(this.flatsWinningService),
+            this.watchLastPageReached(this.flatsNewService),
+            this.watchLastPageReached(this.flatsDislikedService),
+            this.watchLastPageReached(this.flatsAppliedService),
+            this.watchLastPageReached(this.flatsViewingService),
+            this.watchLastPageReached(this.flatsRejectedService),
+            this.watchLastPageReached(this.flatsWinningService)
+        ];
 
-        this.watchLastPageReached(this.flatsNewService);
-        this.watchLastPageReached(this.flatsDislikedService);
+        await Promise.all(promises);
     }
 
-    private watchLoad(service: FlatsServiceInterface) {
+    private async watchLoad(service: FlatsServiceInterface) {
         service.watchFlats().pipe(filter(flats => flats !== undefined), take(1)).subscribe((_flats: UserFlat[]) => {
             this.initLoaded(service);
         });
     }
 
-    private watchLastPageReached(service: FlatsServiceInterface) {
+    private async watchLastPageReached(service: FlatsServiceInterface) {
         service.watchLastPageReached()
             .pipe(takeUntil(this.unsubscribeLastPageReached.asObservable()))
             .subscribe((reached: boolean) => {
@@ -99,8 +128,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                         this.initLoaded(service);
                     }
 
-                    // TODO
-                    if (this.statusLastPageReached.length >= 2 && this.infiniteScroll) {
+                    if (this.statusLastPageReached.length >= this.statusLength && this.infiniteScroll) {
                         this.loaded = true;
                         this.infiniteScroll.disabled = true;
                     }
@@ -138,7 +166,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     private initLoaded(service: FlatsServiceInterface) {
         this.statusLoaded.push(service.status());
 
-        // TODO
-        this.loaded = this.statusLoaded.length >= 2;
+        this.loaded = this.statusLoaded.length >= this.statusLength;
     }
 }

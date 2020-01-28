@@ -5,7 +5,7 @@ import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 export interface FlatsServiceInterface {
 
     init(): Promise<void>;
-    destroy();
+    destroy(): Promise<void>;
 
     watchFlats(): Observable<UserFlat[]>;
     watchLastPageReached(): Observable<boolean>;

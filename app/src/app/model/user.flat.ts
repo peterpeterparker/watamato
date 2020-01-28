@@ -6,7 +6,7 @@ export enum UserFlatStatus {
     VIEWING = 'viewing',
     APPLIED = 'applied',
     REJECTED = 'rejected',
-    WINNER = 'winner'
+    WINNING = 'winning'
 }
 
 export enum UserFlatSource {

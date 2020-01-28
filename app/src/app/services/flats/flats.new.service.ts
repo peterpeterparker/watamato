@@ -32,7 +32,7 @@ export class FlatsNewService implements FlatsServiceInterface {
         await this.find();
     }
 
-    destroy() {
+    async destroy() {
         this.unsubscribe();
     }
 
