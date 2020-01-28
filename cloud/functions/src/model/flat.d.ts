@@ -9,6 +9,8 @@ interface FlatData {
     price: number;
     published_at: Date;
 
+    source: 'ronorp';
+
     created_at?: firestore.Timestamp;
     updated_at?: firestore.Timestamp;
 }

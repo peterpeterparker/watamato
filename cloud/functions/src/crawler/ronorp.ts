@@ -130,7 +130,8 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
             location: info && info.length > 0 && info[0] ? info[0].replace('Ort:', '').trim() : null,
             rooms: info && info.length > 1 && info[1] ? parseFloat(info[1].replace('Zimmer:', '').trim()) : 0,
             price: price,
-            published_at: today
+            published_at: today,
+            source: 'ronorp'
         }
     });
 
