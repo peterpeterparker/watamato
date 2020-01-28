@@ -32,7 +32,6 @@ export class UserFlatsService {
             try {
                 this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
                     const doc: AngularFirestoreDocument<UserFlatData> = this.fireStore.doc<UserFlatData>(`/users/${user.id}/flats/${flatId}`);
-
                     // @ts-ignore
                     await doc.set({
                         status,

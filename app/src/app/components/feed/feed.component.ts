@@ -60,14 +60,13 @@ export class FeedComponent implements OnInit, OnDestroy {
 
         this.dragulaSubscription.add(dragulaService.cancel('bag')
             .subscribe(({el}) => {
-                console.log(el);
                 this.cardBackToOrigin = true;
             })
         );
 
         this.dragulaSubscription.add(dragulaService.drop('bag')
             .subscribe(async ({el, target, source, sibling}) => {
-                await userFlatsService.updateStatus(el.getAttribute('key'), source.getAttribute('status') as UserFlatStatus);
+                await userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
             })
         );
     }
