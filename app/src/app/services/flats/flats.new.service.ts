@@ -24,6 +24,8 @@ export class FlatsNewService implements FlatsServiceInterface {
     private paginationSubscription: Subscription;
     private findSubscription: Subscription;
 
+    private until: Date = new Date();
+
     constructor(private flatsService: FlatsService) {
 
     }
@@ -59,7 +61,7 @@ export class FlatsNewService implements FlatsServiceInterface {
     }
 
     async find() {
-        await this.flatsService.find(this.nextQueryAfter, this.status(), this.findFlats, () => this.unsubscribe());
+        await this.flatsService.find(this.nextQueryAfter, this.status(), this.until, this.findFlats, () => this.unsubscribe());
     }
 
     private findFlats = async (result: FindFlats) => {
