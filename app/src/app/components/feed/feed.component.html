@@ -1,54 +1,66 @@
 <ng-container *ngIf="loaded; else feedLoading;">
   <main>
     <section>
-      <ion-label class="column-title">New</ion-label>
+      <div>
+        <ion-label class="column-title">New</ion-label>
 
-      <div dragula="bag" [attr.status]="'new'">
-        <ion-card *ngFor="let flat of (flatsNew$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-          <app-flat [flat]="flat"></app-flat>
-        </ion-card>
+        <div dragula="bag" [attr.status]="'new'">
+          <ion-card *ngFor="let flat of (flatsNew$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
+        </div>
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Dislike</ion-label>
+      <div>
+        <ion-label class="column-title">Dislike</ion-label>
 
-      <div dragula="bag" [attr.status]="'disliked'">
-        <ion-card *ngFor="let flat of (flatsDisliked$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-          <app-flat [flat]="flat"></app-flat>
-        </ion-card>
+        <div dragula="bag" [attr.status]="'disliked'">
+          <ion-card *ngFor="let flat of (flatsDisliked$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+            <app-flat [flat]="flat"></app-flat>
+          </ion-card>
+        </div>
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Viewings</ion-label>
+      <div>
+        <ion-label class="column-title">Viewings</ion-label>
 
-      <div dragula="bag" [attr.status]="'viewings'">
+        <div dragula="bag" [attr.status]="'viewings'">
 
+        </div>
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Applications</ion-label>
+      <div>
+        <ion-label class="column-title">Applications</ion-label>
 
-      <div dragula="bag" [attr.status]="'applied'">
+        <div dragula="bag" [attr.status]="'applied'">
 
+        </div>
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Rejected</ion-label>
+      <div>
+        <ion-label class="column-title">Rejected</ion-label>
 
-      <div dragula="bag" [attr.status]="'rejected'">
+        <div dragula="bag" [attr.status]="'rejected'">
 
+        </div>
       </div>
     </section>
 
     <section>
-      <ion-label class="column-title">Winner</ion-label>
+      <div>
+        <ion-label class="column-title">Winner</ion-label>
 
-      <div dragula="bag" [attr.status]="'winner'">
+        <div dragula="bag" [attr.status]="'winner'">
 
+        </div>
       </div>
     </section>
   </main>
