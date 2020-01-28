@@ -1,8 +1,11 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FeedComponent} from './feed.component';
+
 import {IonicModule} from '@ionic/angular';
 
+import {DragulaModule} from 'ng2-dragula';
+
+import {FeedComponent} from './feed.component';
 
 @NgModule({
     declarations: [
@@ -10,7 +13,8 @@ import {IonicModule} from '@ionic/angular';
     ],
     imports: [
         CommonModule,
-        IonicModule
+        IonicModule,
+        DragulaModule
     ],
     exports: [
         FeedComponent

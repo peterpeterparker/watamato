@@ -15,6 +15,8 @@ import {environment} from '../environments/environment';
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
 
+import {DragulaModule} from 'ng2-dragula';
+
 @NgModule({
     declarations: [AppComponent],
     entryComponents: [],
@@ -24,7 +26,8 @@ import {AngularFirestoreModule} from '@angular/fire/firestore';
         AppRoutingModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
-        AngularFirestoreModule.enablePersistence()
+        AngularFirestoreModule.enablePersistence(),
+        DragulaModule.forRoot()
     ],
     providers: [
         StatusBar,

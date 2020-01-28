@@ -1,9 +1,9 @@
 <ng-container *ngIf="loaded; else feedLoading;">
   <main>
-    <section>
+    <section dragula="bag" [attr.status]="'incoming'">
       <ion-label class="column-title">Incoming</ion-label>
 
-      <ion-card *ngFor="let flat of (flats$ | async);" mode="md" [href]="flat.data.url" target="_blank">
+      <ion-card *ngFor="let flat of (flats$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
         <img [src]="flat.data.image_url" [class.ronorp]="flat.data.source === 'ronorp'"/>
 
         <ion-badge>Ronorp</ion-badge>
@@ -21,23 +21,23 @@
       </ion-card>
     </section>
 
-    <section>
+    <section dragula="bag" [attr.status]="'dislike'">
       <ion-label class="column-title">Dislike</ion-label>
     </section>
 
-    <section>
+    <section dragula="bag" [attr.status]="'sightseeing'">
       <ion-label class="column-title">Sightseeing</ion-label>
     </section>
 
-    <section>
+    <section dragula="bag" [attr.status]="'applied'">
       <ion-label class="column-title">Applied for</ion-label>
     </section>
 
-    <section>
+    <section dragula="bag" [attr.status]="'rejected'">
       <ion-label class="column-title">Rejected</ion-label>
     </section>
 
-    <section>
+    <section dragula="bag" [attr.status]="'winner'">
       <ion-label class="column-title">Winner</ion-label>
     </section>
   </main>

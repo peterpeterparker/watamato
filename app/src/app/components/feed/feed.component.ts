@@ -1,6 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {IonInfiniteScroll} from '@ionic/angular';
 
+import {DragulaService} from 'ng2-dragula';
+
 import {Observable, Subscription} from 'rxjs';
 import {filter, take} from 'rxjs/operators';
 
@@ -25,7 +27,35 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     private lastPageReachedSubscription: Subscription;
 
-    constructor(private flatsService: FlatsService) {
+    private dragulaSubscription: Subscription = new Subscription();
+
+    // If a card is moved and then put back to its origin, then a click will be triggered.
+    // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
+    private cardBackToOrigin = false;
+
+    constructor(private dragulaService: DragulaService,
+                private flatsService: FlatsService) {
+
+        this.dragulaSubscription.add(dragulaService.drag('bag')
+            .subscribe(({el}) => {
+                el.setAttribute('color', 'secondary');
+                this.cardBackToOrigin = false;
+            })
+        );
+
+        this.dragulaSubscription.add(dragulaService.cancel('bag')
+            .subscribe(({el}) => {
+                console.log(el);
+                this.cardBackToOrigin = true;
+            })
+        );
+
+        this.dragulaSubscription.add(dragulaService.drop('bag')
+            .subscribe(({el, target, source, sibling}) => {
+                // TODO update status
+                console.log('DROP', el, target, source, sibling);
+            })
+        );
     }
 
     async ngOnInit() {
@@ -47,6 +77,10 @@ export class FeedComponent implements OnInit, OnDestroy {
         if (this.lastPageReachedSubscription) {
             this.lastPageReachedSubscription.unsubscribe();
         }
+
+        if (this.dragulaSubscription) {
+            this.dragulaSubscription.unsubscribe();
+        }
     }
 
     async findNext($event) {
@@ -58,6 +92,15 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     toDateObj(flatDate): Date {
         return toDateObj(flatDate);
+    }
+
+    open(flat: Flat) {
+        if (this.cardBackToOrigin) {
+            this.cardBackToOrigin = !this.cardBackToOrigin;
+            return;
+        }
+
+        window.open(flat.data.url, '_blank');
     }
 
 }
