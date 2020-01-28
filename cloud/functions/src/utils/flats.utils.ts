@@ -27,7 +27,9 @@ function createOrMerge(flatData: FlatData | undefined): Promise<void> {
             if (flat === undefined) {
                 await add('/flats/', flatData);
             } else {
-                await merge(flat.id, flatData);
+                // Right now, we don't process an update of the data
+                // If this would be activated, then the a clone functions would be needed to update the users/flats too
+                // await merge(flat.id, flatData);
             }
 
             resolve();
@@ -59,6 +61,7 @@ export function add(collectionPath: string, flatData: FlatData | UserFlatData | 
     });
 }
 
+// @ts-ignore
 function merge(flatId: string, flatData: FlatData | undefined): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
         try {
