@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonInfiniteScroll} from '@ionic/angular';
+import {IonInfiniteScroll, ToastController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
@@ -8,10 +8,10 @@ import {filter, take, takeUntil} from 'rxjs/operators';
 
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
-import {FlatsNewService} from '../../services/flats/flats.new.service';
-import {FlatsDislikedService} from '../../services/flats/flats.disliked.service';
-import {FlatsServiceInterface} from '../../services/flats/flats.service.interface';
 import {UserFlatsService} from '../../services/user/user.flats.service';
+
+import {FlatsNewService} from '../../services/flats/flats.new.service';
+import {FlatsServiceInterface} from '../../services/flats/flats.service.interface';
 import {FlatsAppliedService} from '../../services/flats/flats.applied.service';
 import {FlatsRejectedService} from '../../services/flats/flats.rejected.service';
 import {FlatsViewingService} from '../../services/flats/flats.viewing.service';
@@ -27,7 +27,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
     flatsNew$: Observable<UserFlat[]>;
-    flatsDisliked$: Observable<UserFlat[]>;
     flatsViewing$: Observable<UserFlat[]>;
     flatsApplied$: Observable<UserFlat[]>;
     flatsRejected$: Observable<UserFlat[]>;
@@ -42,13 +41,17 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     private dragulaSubscription: Subscription = new Subscription();
 
-    private statusLength = Object.keys(UserFlatStatus).length;
+    // -1 as we don't display 'dislike' status
+    private statusLength = Object.keys(UserFlatStatus).length - 1;
 
     // If a card is moved and then put back to its origin, then a click will be triggered.
+    // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
+    private cardBackToOrigin = false;
+
     constructor(private dragulaService: DragulaService,
+                private toastController: ToastController,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
-                private flatsDislikedService: FlatsDislikedService,
                 private flatsAppliedService: FlatsAppliedService,
                 private flatsViewingService: FlatsViewingService,
                 private flatsRejectedService: FlatsRejectedService,
@@ -75,21 +78,47 @@ export class FeedComponent implements OnInit, OnDestroy {
             })
         );
 
+        this.dragulaSubscription.add(dragulaService.over('bag')
+            .subscribe(({el, container, source}) => {
+                this.highlightMirrorCardForDelete(container as HTMLElement, true);
+            })
+        );
+
+        this.dragulaSubscription.add(dragulaService.out('bag')
+            .subscribe(({el, container, source}) => {
+                this.highlightMirrorCardForDelete(container as HTMLElement, false);
+            })
+        );
+
         this.dragulaSubscription.add(dragulaService.drop('bag')
             .subscribe(async ({el, target, source, sibling}) => {
                 await userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+
+                await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
 
                 await this.findAll();
             })
         );
     }
 
-    // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
-    private cardBackToOrigin = false;
+    private highlightMirrorCardForDelete(container: HTMLElement, highlight: boolean) {
+        if (container.getAttribute('status') as UserFlatStatus === UserFlatStatus.DISLIKED) {
+            const mirror: HTMLElement = document.querySelector('body > ion-card');
+
+            if (!mirror) {
+                return;
+            }
+
+            if (highlight) {
+                mirror.classList.add('delete');
+            } else {
+                mirror.classList.remove('delete');
+            }
+        }
+    }
 
     async ngOnInit() {
         this.flatsNew$ = this.flatsNewService.watchFlats();
-        this.flatsDisliked$ = this.flatsDislikedService.watchFlats();
         this.flatsViewing$ = this.flatsViewingService.watchFlats();
         this.flatsApplied$ = this.flatsAppliedService.watchFlats();
         this.flatsRejected$ = this.flatsRejectedService.watchFlats();
@@ -97,13 +126,11 @@ export class FeedComponent implements OnInit, OnDestroy {
 
         const promises: Promise<void>[] = [
             this.watchLoad(this.flatsNewService),
-            this.watchLoad(this.flatsDislikedService),
             this.watchLoad(this.flatsAppliedService),
             this.watchLoad(this.flatsViewingService),
             this.watchLoad(this.flatsRejectedService),
             this.watchLoad(this.flatsWinningService),
             this.watchLastPageReached(this.flatsNewService),
-            this.watchLastPageReached(this.flatsDislikedService),
             this.watchLastPageReached(this.flatsAppliedService),
             this.watchLastPageReached(this.flatsViewingService),
             this.watchLastPageReached(this.flatsRejectedService),
@@ -157,7 +184,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     private async findAll() {
         const promises: Promise<void>[] = [
             this.flatsNewService.find(),
-            this.flatsDislikedService.find(),
             this.flatsAppliedService.find(),
             this.flatsViewingService.find(),
             this.flatsRejectedService.find(),
@@ -180,5 +206,18 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.statusLoaded.push(service.status());
 
         this.loaded = this.statusLoaded.length >= this.statusLength;
+    }
+
+    private async presentDeleteToast(status: UserFlatStatus) {
+        if (status !== UserFlatStatus.DISLIKED) {
+            return;
+        }
+
+        const toast = await this.toastController.create({
+            message: 'Deleted.',
+            duration: 500
+        });
+
+        await toast.present();
     }
 }
