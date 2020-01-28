@@ -77,8 +77,6 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
         return undefined;
     }
 
-    // TODO: Filter either more recent than time or later check if key already exists
-
     const results: FlatData[] = elements.filter((element: string) => {
         const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
         const dateChild = dom.window.document.querySelector('div.user div.pull-left');
