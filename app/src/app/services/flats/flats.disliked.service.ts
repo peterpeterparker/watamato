@@ -5,7 +5,7 @@ import {QueryDocumentSnapshot} from '@angular/fire/firestore';
 import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-import {UserFlat, UserFlatData} from '../../model/user.flat';
+import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
 
 import {FindFlats, FlatsService} from './flats.service';
 
@@ -54,8 +54,8 @@ export class FlatsDislikedService implements FlatsServiceInterface {
         return this.lastPageReached.asObservable();
     }
 
-    status(): 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner' {
-        return 'disliked';
+    status(): UserFlatStatus {
+        return UserFlatStatus.DISLIKED;
     }
 
     async find() {

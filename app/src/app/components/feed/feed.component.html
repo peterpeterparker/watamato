@@ -4,8 +4,9 @@
       <ion-label class="column-title">New</ion-label>
 
       <div dragula="bag" [attr.status]="'new'">
-        <app-flat [status]="'new'"
-                  (open)="open($event)"></app-flat>
+        <ion-card *ngFor="let flat of (flatsNew$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+          <app-flat [flat]="flat"></app-flat>
+        </ion-card>
       </div>
     </section>
 
@@ -13,8 +14,9 @@
       <ion-label class="column-title">Dislike</ion-label>
 
       <div dragula="bag" [attr.status]="'disliked'">
-        <app-flat [status]="'disliked'"
-                  (open)="open($event)"></app-flat>
+        <ion-card *ngFor="let flat of (flatsDisliked$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
+          <app-flat [flat]="flat"></app-flat>
+        </ion-card>
       </div>
     </section>
 

@@ -3,14 +3,15 @@ import {IonInfiniteScroll} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
-import {Subject, Subscription} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
-import {UserFlat} from '../../model/user.flat';
+import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
 import {FlatsNewService} from '../../services/flats/flats.new.service';
 import {FlatsDislikedService} from '../../services/flats/flats.disliked.service';
 import {FlatsServiceInterface} from '../../services/flats/flats.service.interface';
+import {UserFlatsService} from '../../services/user/user.flats.service';
 
 @Component({
     selector: 'app-feed',
@@ -21,10 +22,13 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
+    flatsNew$: Observable<UserFlat[]>;
+    flatsDisliked$: Observable<UserFlat[]>;
+
     loaded = false;
 
-    private statusLoaded: ('new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner')[] = [];
-    private statusLastPageReached: ('new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner')[] = [];
+    private statusLoaded: UserFlatStatus[] = [];
+    private statusLastPageReached: UserFlatStatus[] = [];
 
     private unsubscribeLastPageReached: Subject<void> = new Subject();
 
@@ -35,6 +39,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     private cardBackToOrigin = false;
 
     constructor(private dragulaService: DragulaService,
+                private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
                 private flatsDislikedService: FlatsDislikedService) {
 
@@ -61,14 +66,16 @@ export class FeedComponent implements OnInit, OnDestroy {
         );
 
         this.dragulaSubscription.add(dragulaService.drop('bag')
-            .subscribe(({el, target, source, sibling}) => {
-                // TODO update status
-                console.log('DROP', el, target, source, sibling);
+            .subscribe(async ({el, target, source, sibling}) => {
+                await userFlatsService.updateStatus(el.getAttribute('key'), source.getAttribute('status') as UserFlatStatus);
             })
         );
     }
 
     ngOnInit() {
+        this.flatsNew$ = this.flatsNewService.watchFlats();
+        this.flatsDisliked$ = this.flatsDislikedService.watchFlats();
+
         this.watchLoad(this.flatsNewService);
         this.watchLoad(this.flatsDislikedService);
 
@@ -114,6 +121,8 @@ export class FeedComponent implements OnInit, OnDestroy {
     async findNext($event) {
         setTimeout(async () => {
             await this.flatsNewService.find();
+            await this.flatsDislikedService.find();
+
             $event.target.complete();
         }, 500);
     }

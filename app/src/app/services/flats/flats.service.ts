@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
+
 import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
 
 import {Observable, Subscription} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 
-import {UserFlat, UserFlatData} from '../../model/user.flat';
+import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
 import {User} from '../../model/user';
 
 import {UserService} from '../user/user.service';
@@ -26,7 +27,7 @@ export class FlatsService {
                 private userService: UserService) {
     }
 
-    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner', find: (result: FindFlats) => void, unsubscribe: () => void) {
+    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, find: (result: FindFlats) => void, unsubscribe: () => void) {
         try {
             this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
                 const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status);
@@ -48,7 +49,7 @@ export class FlatsService {
         }
     }
 
-    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner'): AngularFirestoreCollection<UserFlatData> {
+    private getCollectionQuery(user: User, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus): AngularFirestoreCollection<UserFlatData> {
         const collectionName = `/users/${user.id}/flats/`;
 
         if (nextQueryAfter) {

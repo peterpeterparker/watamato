@@ -1,5 +1,6 @@
 import {Observable} from 'rxjs';
-import {UserFlat} from '../../model/user.flat';
+
+import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
 export interface FlatsServiceInterface {
 
@@ -9,7 +10,7 @@ export interface FlatsServiceInterface {
     watchFlats(): Observable<UserFlat[]>;
     watchLastPageReached(): Observable<boolean>;
 
-    status(): 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner';
+    status(): UserFlatStatus;
 
     find(): Promise<void>;
 }

@@ -1,5 +1,18 @@
 import {DocumentReference} from '@angular/fire/firestore';
 
+export enum UserFlatStatus {
+    NEW = 'new',
+    DISLIKED = 'disliked',
+    VIEWING = 'viewing',
+    APPLIED = 'applied',
+    REJECTED = 'rejected',
+    WINNER = 'winner'
+}
+
+export enum UserFlatSource {
+    RONORP = 'ronorp'
+}
+
 export interface UserFlatData {
     url: string | null;
     image_url: string | null;
@@ -9,9 +22,9 @@ export interface UserFlatData {
     price: number;
     published_at: Date;
 
-    source: 'ronorp';
+    source: UserFlatSource;
 
-    status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winner';
+    status: UserFlatStatus;
 
     created_at: firebase.firestore.Timestamp;
     updated_at: firebase.firestore.Timestamp;
