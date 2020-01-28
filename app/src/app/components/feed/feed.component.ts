@@ -78,6 +78,8 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.dragulaSubscription.add(dragulaService.drop('bag')
             .subscribe(async ({el, target, source, sibling}) => {
                 await userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+
+                await this.findAll();
             })
         );
     }
@@ -147,19 +149,22 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     async findNext($event) {
         setTimeout(async () => {
-            const promises: Promise<void>[] = [
-                this.flatsNewService.find(),
-                this.flatsDislikedService.find(),
-                this.flatsAppliedService.find(),
-                this.flatsViewingService.find(),
-                this.flatsRejectedService.find(),
-                this.flatsWinningService.find()
-            ];
-
-            await Promise.all(promises);
-
+            await this.findAll();
             $event.target.complete();
         }, 500);
+    }
+
+    private async findAll() {
+        const promises: Promise<void>[] = [
+            this.flatsNewService.find(),
+            this.flatsDislikedService.find(),
+            this.flatsAppliedService.find(),
+            this.flatsViewingService.find(),
+            this.flatsRejectedService.find(),
+            this.flatsWinningService.find()
+        ];
+
+        await Promise.all(promises);
     }
 
     open(flat: UserFlat) {

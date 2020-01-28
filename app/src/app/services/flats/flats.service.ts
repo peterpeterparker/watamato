@@ -12,7 +12,6 @@ import {UserService} from '../user/user.service';
 
 export interface FindFlats {
     nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
-    paginationSubscription: Subscription;
     query: Observable<UserFlat[]>;
 }
 
@@ -28,19 +27,16 @@ export class FlatsService {
                 private userService: UserService) {
     }
 
-    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, find: (result: FindFlats) => void, unsubscribe: () => void) {
+    find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, find: (result: FindFlats) => void) {
         try {
             this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
                 const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status);
 
-                unsubscribe();
-
-                const paginationSubscription: Subscription = collection.get().subscribe(async (first) => {
+                collection.get().pipe(take(1)).subscribe(async (first) => {
                     nextQueryAfter = first.docs[first.docs.length - 1] as QueryDocumentSnapshot<UserFlatData>;
 
                     find({
                         nextQueryAfter,
-                        paginationSubscription,
                         query: this.query(collection, nextQueryAfter)
                     });
                 });

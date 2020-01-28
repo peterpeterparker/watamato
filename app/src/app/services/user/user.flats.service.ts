@@ -37,6 +37,8 @@ export class UserFlatsService {
                         status,
                         updated_at: firebase.firestore.Timestamp.now()
                     }, {merge: true});
+
+                    resolve();
                 });
             } catch (err) {
                 reject(err);

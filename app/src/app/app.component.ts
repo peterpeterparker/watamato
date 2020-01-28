@@ -61,17 +61,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     async ngOnDestroy() {
-        const promises: Promise<void>[] = [
-            this.flatsNewService.destroy(),
-            this.flatsDislikedService.destroy(),
-            this.flatsAppliedService.destroy(),
-            this.flatsViewingService.destroy(),
-            this.flatsRejectedService.destroy(),
-            this.flatsWinningService.destroy()
-        ];
-
-        await Promise.all(promises);
-
         this.userService.destroy();
     }
 }
