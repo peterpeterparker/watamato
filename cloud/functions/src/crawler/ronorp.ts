@@ -185,10 +185,10 @@ async function filterSearch(page: Page) {
 
     await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_type]"][attr_label="Mieten"]');
     await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_stadt_agglo]"][attr_label="Stadt"]');
-    await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_price_from]"][attr_label="1500"]');
+    await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_price_from]"][attr_label="1400"]');
 
-    // TODO: Modify max value
-    await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_price_to]"][attr_label="3000"]');
+    // Activated for max value
+    // await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_price_to]"][attr_label="1900"]');
 
     await page.evaluate((selector) => document.querySelector(selector).click(), 'a[data-label="FilterButton"]');
 
