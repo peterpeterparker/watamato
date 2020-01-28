@@ -1,8 +1,12 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Flatboard</ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="ion-padding">
   <ng-container *ngIf="(user$ | async) as user; else userLoading;">
-    <main>
-        <app-feed></app-feed>
-    </main>
+    <app-feed></app-feed>
   </ng-container>
 
   <ng-template #userLoading>

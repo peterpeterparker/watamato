@@ -1,19 +1,44 @@
 <ng-container *ngIf="loaded; else feedLoading;">
+  <main>
+    <section>
+      <ion-label class="column-title">Incoming</ion-label>
 
-  <ion-card *ngFor="let flat of (flats$ | async);">
-    <img [src]="flat.data.image_url"/>
+      <ion-card *ngFor="let flat of (flats$ | async);" mode="md">
+        <img [src]="flat.data.image_url"/>
 
-    <ion-card-header>
-      <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
-      <ion-card-title>{{flat.data.title}}</ion-card-title>
-    </ion-card-header>
+        <ion-card-header>
+          <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
+          <ion-card-title>{{flat.data.title}}</ion-card-title>
+        </ion-card-header>
 
-    <ion-card-content>
-      <p>{{flat.data.location}}</p>
-      <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
-      <p>{{flat.data.rooms}} rooms</p>
-    </ion-card-content>
-  </ion-card>
+        <ion-card-content>
+          <p>{{flat.data.rooms}} rooms</p>
+          <p>{{flat.data.location}}</p>
+          <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
+        </ion-card-content>
+      </ion-card>
+    </section>
+
+    <section>
+      <ion-label class="column-title">Dislike</ion-label>
+    </section>
+
+    <section>
+      <ion-label class="column-title">Sightseeing</ion-label>
+    </section>
+
+    <section>
+      <ion-label class="column-title">Applied for</ion-label>
+    </section>
+
+    <section>
+      <ion-label class="column-title">Rejected</ion-label>
+    </section>
+
+    <section>
+      <ion-label class="column-title">Winner</ion-label>
+    </section>
+  </main>
 
   <ion-infinite-scroll (ionInfinite)="findNext($event)">
     <ion-infinite-scroll-content>

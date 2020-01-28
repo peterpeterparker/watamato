@@ -1,3 +1,42 @@
-ion-card {
-  min-height: 1000px;
+/** https://css-tricks.com/look-ma-no-media-queries-responsive-layouts-using-css-grid/ */
+
+main {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-gap: .5rem;
+  align-items: flex-start;
+  /* Uncomment these lines if you want to have the standard Trello behavior instead of the column wrapping */
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(260px, 1fr);
+
+  section {
+    display: grid;
+    grid-template-rows: auto;
+    grid-gap: .5rem;
+    margin: .5rem 0;
+
+    background: var(--ion-color-light);
+    border-radius: 3px;
+
+    ion-label.column-title {
+      padding: 8px 16px 0;
+      font-weight: 500;
+    }
+
+    ion-card {
+      background: white;
+
+      ion-card-subtitle, p {
+        font-size: 0.8rem;
+      }
+
+      ion-card-title {
+        font-size: 1rem;
+      }
+
+      &:last-of-type {
+        margin-bottom: 32px;
+      }
+    }
+  }
 }
