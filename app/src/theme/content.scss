@@ -3,7 +3,8 @@ ion-router-outlet {
     --ion-background-color: #0079bf;
 
     main {
-      overflow: scroll;
+      overflow-x: scroll;
+      overflow-y: hidden;
     }
   }
 }
