@@ -8,5 +8,9 @@ if (environment.production) {
   enableProdMode();
 }
 
+import { defineCustomElements as deckDeckGoLazyImgElements } from '@deckdeckgo/lazy-img/dist/loader';
+
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
+
+deckDeckGoLazyImgElements(window);
