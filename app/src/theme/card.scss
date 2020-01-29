@@ -5,6 +5,14 @@ body {
 
     cursor: pointer;
 
+    deckgo-lazy-img {
+      --deckgo-lazy-img-width: 100%;
+      --deckgo-lazy-img-height: auto;
+      --deckgo-lazy-img-display: block;
+      --deckgo-lazy-img-object-fit: cover;
+      --deckgo-lazy-img-max-height: 160px;
+    }
+
     section {
       display: flex;
       justify-content: space-between;
