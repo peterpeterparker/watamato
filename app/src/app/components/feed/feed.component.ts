@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonInfiniteScroll, ToastController} from '@ionic/angular';
+import {IonInfiniteScroll, Platform, ToastController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
@@ -49,6 +49,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     private cardBackToOrigin = false;
 
     constructor(private dragulaService: DragulaService,
+                private platform: Platform,
                 private toastController: ToastController,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
@@ -86,6 +87,17 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     private initDragula(): Promise<void> {
         return new Promise<void>((resolve) => {
+            if (this.isMobile()) {
+                this.dragulaService.createGroup('bag', {
+                    moves: (el, target, source, sibling) => {
+                        return false;
+                    },
+                    accepts: (el, target, source, sibling) => {
+                        return false;
+                    }
+                });
+            }
+
             this.dragulaSubscription.add(this.dragulaService.drag('bag')
                 .subscribe(({el}) => {
                     this.cardBackToOrigin = false;
@@ -228,5 +240,9 @@ export class FeedComponent implements OnInit, OnDestroy {
         });
 
         await toast.present();
+    }
+
+    isMobile(): boolean {
+        return this.platform.is('mobile');
     }
 }

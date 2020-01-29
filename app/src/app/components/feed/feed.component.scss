@@ -48,6 +48,10 @@ section.delete {
   justify-content: flex-end;
   align-items: flex-end;
 
+  &.mobile {
+    display: none;
+  }
+
   > div {
     background: var(--ion-color-danger);
     border-radius: 50%;

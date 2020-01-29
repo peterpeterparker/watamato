@@ -61,7 +61,7 @@
     </section>
   </main>
 
-  <section class="delete ion-margin" dragula="bag" [attr.status]="'disliked'">
+  <section class="delete ion-margin" dragula="bag" [attr.status]="'disliked'" [class.mobile]="isMobile()">
     <div>
       <ion-icon name="trash" [lazy]="true" aria-label="Delete"></ion-icon>
     </div>
