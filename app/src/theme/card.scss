@@ -5,6 +5,14 @@ body {
 
     cursor: pointer;
 
+    deckgo-lazy-img {
+      --deckgo-lazy-img-width: 100%;
+      --deckgo-lazy-img-height: auto;
+      --deckgo-lazy-img-display: block;
+      --deckgo-lazy-img-object-fit: cover;
+      --deckgo-lazy-img-max-height: 160px;
+    }
+
     section {
       display: flex;
       justify-content: space-between;
@@ -17,9 +25,14 @@ body {
       ion-badge {
         padding: 2px 8px;
         font-weight: 300;
+        text-transform: capitalize;
 
         &.ronorp {
           background: #d55e8b;
+        }
+
+        &.homegate {
+          background: #ea3d43;
         }
       }
 
@@ -53,6 +66,7 @@ body {
 
     ion-card-title {
       font-size: 1rem;
+      max-width: calc(260px - 64px);
     }
 
     &:last-of-type {

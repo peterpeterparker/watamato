@@ -1,23 +1,23 @@
-import {firestore} from 'firebase-admin';
+import { firestore } from "firebase-admin";
 
 interface FlatData {
-    url: string | null;
-    image_url: string | null;
-    title: string | null;
-    location: string | null;
-    rooms: number;
-    price: number;
-    published_at: Date;
+  url: string | null;
+  image_url: string | null;
+  title: string | null;
+  location: string | null;
+  rooms: number;
+  price: number;
+  published_at: Date;
 
-    source: 'ronorp';
+  source: "ronorp" | "homegate";
 
-    created_at?: firestore.Timestamp;
-    updated_at?: firestore.Timestamp;
+  created_at?: firestore.Timestamp;
+  updated_at?: firestore.Timestamp;
 }
 
 interface Flat {
-    id: string;
-    ref: firestore.DocumentReference;
+  id: string;
+  ref: firestore.DocumentReference;
 
-    data: FlatData;
+  data: FlatData;
 }
