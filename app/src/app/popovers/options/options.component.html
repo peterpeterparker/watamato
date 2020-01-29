@@ -1,0 +1,39 @@
+<ion-list>
+  <ion-item-divider mode="md">
+    <ion-label>
+      Status
+    </ion-label>
+  </ion-item-divider>
+
+  <ion-item *ngIf="status !== 'new'" (click)="move('new')">
+    <ion-label>New</ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="status !== 'viewing'" (click)="move('viewing')">
+    <ion-label>Viewing</ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="status !== 'applied'" (click)="move('applied')">
+    <ion-label>Apply</ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="status !== 'rejected'" (click)="move('rejected')">
+    <ion-label>Rejected</ion-label>
+  </ion-item>
+
+  <ion-item *ngIf="status !== 'winning'" (click)="move('winning')">
+    <ion-label>Winner</ion-label>
+  </ion-item>
+</ion-list>
+
+<ion-list *ngIf="status !== 'disliked'">
+  <ion-item-divider mode="md">
+    <ion-label>
+      Actions
+    </ion-label>
+  </ion-item-divider>
+
+  <ion-item (click)="delete()">
+    <ion-label>Delete</ion-label>
+  </ion-item>
+</ion-list>

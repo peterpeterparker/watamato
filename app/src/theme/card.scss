@@ -5,18 +5,50 @@ body {
 
     cursor: pointer;
 
-    ion-badge {
-      margin: 16px 16px 0;
-      padding: 2px 8px;
-      font-weight: 300;
+    section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      &.ronorp {
-        background: #d55e8b;
+      margin: 16px 16px 0;
+
+      position: relative;
+
+      ion-badge {
+        padding: 2px 8px;
+        font-weight: 300;
+
+        &.ronorp {
+          background: #d55e8b;
+        }
+      }
+
+      button {
+        position: relative;
+
+        border: none;
+        margin: 0;
+        padding: 8px;
+        outline: none;
+
+        width: auto;
+
+        cursor: pointer;
+        user-select: none;
+
+        font-size: inherit;
+
+        background: none;
       }
     }
 
-    ion-card-subtitle, p {
+    p {
       font-size: 0.8rem;
+
+      &.published-at {
+        margin-top: 16px;
+        font-size: 0.5rem;
+      }
     }
 
     ion-card-title {

@@ -7,6 +7,7 @@ import {DragulaModule} from 'ng2-dragula';
 
 import {FeedComponent} from './feed.component';
 import {FlatModule} from '../flat/flat.module';
+import {OptionsModule} from '../../popovers/options/options.module';
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import {FlatModule} from '../flat/flat.module';
         CommonModule,
         IonicModule,
         DragulaModule,
-        FlatModule
+        FlatModule,
+        OptionsModule
     ],
     exports: [
         FeedComponent
