@@ -14,8 +14,11 @@ export class FlatComponent {
     @Input()
     flat: UserFlat;
 
+    @Input()
+    mobile: boolean;
+
     @Output()
-    options: EventEmitter<{$event: UIEvent, elementRef: HTMLElement}> = new EventEmitter();
+    options: EventEmitter<{ $event: UIEvent, elementRef: HTMLElement }> = new EventEmitter();
 
     constructor(private hostElement: ElementRef) {
 

@@ -3,7 +3,7 @@
 <section>
   <ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
 
-  <button (click)="openOptions($event)" slot="end">
+  <button (click)="openOptions($event)" slot="end" *ngIf="mobile">
     <ion-icon name="more" aria-label="Options"></ion-icon>
   </button>
 </section>

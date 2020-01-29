@@ -6,7 +6,7 @@
 
         <div dragula="bag" [attr.status]="'new'">
           <ion-card *ngFor="let flat of (flatsNew$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
           </ion-card>
         </div>
       </div>
@@ -18,7 +18,7 @@
 
         <div dragula="bag" [attr.status]="'viewing'">
           <ion-card *ngFor="let flat of (flatsViewing$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
           </ion-card>
         </div>
       </div>
@@ -30,7 +30,7 @@
 
         <div dragula="bag" [attr.status]="'applied'">
           <ion-card *ngFor="let flat of (flatsApplied$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
           </ion-card>
         </div>
       </div>
@@ -42,7 +42,7 @@
 
         <div dragula="bag" [attr.status]="'rejected'">
           <ion-card *ngFor="let flat of (flatsRejected$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
           </ion-card>
         </div>
       </div>
@@ -54,7 +54,7 @@
 
         <div dragula="bag" [attr.status]="'winning'">
           <ion-card *ngFor="let flat of (flatsWinning$ | async);" mode="md" (click)="open(flat)" [attr.key]="flat.id">
-            <app-flat [flat]="flat" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
           </ion-card>
         </div>
       </div>
