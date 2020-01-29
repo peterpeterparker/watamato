@@ -223,7 +223,7 @@ async function goLogin(page: Page) {
 
 async function goHomepage(page: Page) {
     await page.goto('https://www.ronorp.net/', {
-        waitUntil: 'networkidle0',
+        waitUntil: 'domcontentloaded',
     });
 
     await (page as any)._client.send('ServiceWorker.enable');
@@ -233,3 +233,14 @@ async function goHomepage(page: Page) {
 
     // await page.waitForNavigation();
 }
+
+
+// Uncomment to run the function locally
+
+// (async () => {
+//     try {
+//         await crawlRonorp();
+//     } catch (e) {
+//         // Deal with the fact the chain failed
+//     }
+// })();
