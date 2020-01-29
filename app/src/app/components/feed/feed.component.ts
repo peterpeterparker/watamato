@@ -57,67 +57,11 @@ export class FeedComponent implements OnInit, OnDestroy {
                 private flatsRejectedService: FlatsRejectedService,
                 private flatsWinningService: FlatsWinningService) {
 
-        this.dragulaSubscription.add(dragulaService.drag('bag')
-            .subscribe(({el}) => {
-                this.cardBackToOrigin = false;
-            })
-        );
-
-        this.dragulaSubscription.add(dragulaService.cloned('bag')
-            .subscribe(({clone, original, cloneType}) => {
-                setTimeout(() => {
-                    (clone as HTMLElement).style.transform = 'rotate(5deg)';
-                }, 10);
-                this.cardBackToOrigin = false;
-            })
-        );
-
-        this.dragulaSubscription.add(dragulaService.cancel('bag')
-            .subscribe(({el}) => {
-                this.cardBackToOrigin = true;
-            })
-        );
-
-        this.dragulaSubscription.add(dragulaService.over('bag')
-            .subscribe(({el, container, source}) => {
-                this.highlightMirrorCardForDelete(container as HTMLElement, true);
-            })
-        );
-
-        this.dragulaSubscription.add(dragulaService.out('bag')
-            .subscribe(({el, container, source}) => {
-                this.highlightMirrorCardForDelete(container as HTMLElement, false);
-            })
-        );
-
-        this.dragulaSubscription.add(dragulaService.drop('bag')
-            .subscribe(async ({el, target, source, sibling}) => {
-                await userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
-
-                await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
-
-                await this.findAll();
-            })
-        );
-    }
-
-    private highlightMirrorCardForDelete(container: HTMLElement, highlight: boolean) {
-        if (container.getAttribute('status') as UserFlatStatus === UserFlatStatus.DISLIKED) {
-            const mirror: HTMLElement = document.querySelector('body > ion-card');
-
-            if (!mirror) {
-                return;
-            }
-
-            if (highlight) {
-                mirror.classList.add('delete');
-            } else {
-                mirror.classList.remove('delete');
-            }
-        }
     }
 
     async ngOnInit() {
+        await this.initDragula();
+
         this.flatsNew$ = this.flatsNewService.watchFlats();
         this.flatsViewing$ = this.flatsViewingService.watchFlats();
         this.flatsApplied$ = this.flatsAppliedService.watchFlats();
@@ -138,6 +82,71 @@ export class FeedComponent implements OnInit, OnDestroy {
         ];
 
         await Promise.all(promises);
+    }
+
+    private initDragula(): Promise<void> {
+        return new Promise<void>((resolve) => {
+            this.dragulaSubscription.add(this.dragulaService.drag('bag')
+                .subscribe(({el}) => {
+                    this.cardBackToOrigin = false;
+                })
+            );
+
+            this.dragulaSubscription.add(this.dragulaService.cloned('bag')
+                .subscribe(({clone, original, cloneType}) => {
+                    setTimeout(() => {
+                        (clone as HTMLElement).style.transform = 'rotate(5deg)';
+                    }, 10);
+                    this.cardBackToOrigin = false;
+                })
+            );
+
+            this.dragulaSubscription.add(this.dragulaService.cancel('bag')
+                .subscribe(({el}) => {
+                    this.cardBackToOrigin = true;
+                })
+            );
+
+            this.dragulaSubscription.add(this.dragulaService.over('bag')
+                .subscribe(({el, container, source}) => {
+                    this.highlightMirrorCardForDelete(container as HTMLElement, true);
+                })
+            );
+
+            this.dragulaSubscription.add(this.dragulaService.out('bag')
+                .subscribe(({el, container, source}) => {
+                    this.highlightMirrorCardForDelete(container as HTMLElement, false);
+                })
+            );
+
+            this.dragulaSubscription.add(this.dragulaService.drop('bag')
+                .subscribe(async ({el, target, source, sibling}) => {
+                    await this.userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+
+                    await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
+
+                    await this.findAll();
+                })
+            );
+
+            resolve();
+        });
+    }
+
+    private highlightMirrorCardForDelete(container: HTMLElement, highlight: boolean) {
+        if (container.getAttribute('status') as UserFlatStatus === UserFlatStatus.DISLIKED) {
+            const mirror: HTMLElement = document.querySelector('body > ion-card');
+
+            if (!mirror) {
+                return;
+            }
+
+            if (highlight) {
+                mirror.classList.add('delete');
+            } else {
+                mirror.classList.remove('delete');
+            }
+        }
     }
 
     private async watchLoad(service: FlatsServiceInterface) {
