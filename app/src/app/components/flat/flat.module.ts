@@ -5,19 +5,9 @@ import {IonicModule} from '@ionic/angular';
 import {FlatComponent} from './flat.component';
 
 @NgModule({
-    declarations: [
-        FlatComponent
-    ],
-    imports: [
-        CommonModule,
-        IonicModule
-    ],
-    exports: [
-        FlatComponent
-    ],
-    schemas: [
-        CUSTOM_ELEMENTS_SCHEMA
-    ]
+  declarations: [FlatComponent],
+  imports: [CommonModule, IonicModule],
+  exports: [FlatComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class FlatModule {
-}
+export class FlatModule {}

@@ -20,82 +20,81 @@ import {MsgService} from './services/msg/msg.service';
 import {UserFlatStatus} from './model/user.flat';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
-    styleUrls: ['app.component.scss']
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private msgSubscription: Subscription;
+  private errorSubscription: Subscription;
 
-    private msgSubscription: Subscription;
-    private errorSubscription: Subscription;
+  constructor(
+    private platform: Platform,
+    private toastController: ToastController,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private authService: AuthService,
+    private flatsNewService: FlatsNewService,
+    private flatsAppliedService: FlatsAppliedService,
+    private flatsViewingService: FlatsViewingService,
+    private flatsRejectedService: FlatsRejectedService,
+    private flatsWinningService: FlatsWinningService,
+    private userService: UserService,
+    private msgService: MsgService
+  ) {
+    this.initializeApp();
+  }
 
-    constructor(
-        private platform: Platform,
-        private toastController: ToastController,
-        private splashScreen: SplashScreen,
-        private statusBar: StatusBar,
-        private authService: AuthService,
-        private flatsNewService: FlatsNewService,
-        private flatsAppliedService: FlatsAppliedService,
-        private flatsViewingService: FlatsViewingService,
-        private flatsRejectedService: FlatsRejectedService,
-        private flatsWinningService: FlatsWinningService,
-        private userService: UserService,
-        private msgService: MsgService
-    ) {
-        this.initializeApp();
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+    });
+  }
+
+  async ngOnInit() {
+    await this.authService.anonymousLogin();
+
+    const promises: Promise<void>[] = [
+      this.flatsNewService.init(),
+      this.flatsAppliedService.init(),
+      this.flatsViewingService.init(),
+      this.flatsRejectedService.init(),
+      this.flatsWinningService.init()
+    ];
+
+    await Promise.all(promises);
+
+    this.userService.init();
+
+    this.msgSubscription = this.msgService.watchMsg().subscribe(async (msg: string) => {
+      await this.presentMsgToast(msg);
+    });
+
+    this.errorSubscription = this.msgService.watchError().subscribe(async (error: string) => {
+      await this.presentMsgToast(error, 'danger');
+    });
+  }
+
+  async ngOnDestroy() {
+    this.userService.destroy();
+
+    if (this.msgSubscription) {
+      this.msgSubscription.unsubscribe();
     }
 
-    initializeApp() {
-        this.platform.ready().then(() => {
-            this.statusBar.styleDefault();
-            this.splashScreen.hide();
-        });
+    if (this.errorSubscription) {
+      this.errorSubscription.unsubscribe();
     }
+  }
 
-    async ngOnInit() {
-        await this.authService.anonymousLogin();
+  private async presentMsgToast(msg: string, color?: string) {
+    const toast = await this.toastController.create({
+      message: msg,
+      duration: 500,
+      color
+    });
 
-        const promises: Promise<void>[] = [
-            this.flatsNewService.init(),
-            this.flatsAppliedService.init(),
-            this.flatsViewingService.init(),
-            this.flatsRejectedService.init(),
-            this.flatsWinningService.init()
-        ];
-
-        await Promise.all(promises);
-
-        this.userService.init();
-
-        this.msgSubscription = this.msgService.watchMsg().subscribe(async (msg: string) => {
-            await this.presentMsgToast(msg);
-        });
-
-        this.errorSubscription = this.msgService.watchError().subscribe(async (error: string) => {
-            await this.presentMsgToast(error, 'danger');
-        });
-    }
-
-    async ngOnDestroy() {
-        this.userService.destroy();
-
-        if (this.msgSubscription) {
-            this.msgSubscription.unsubscribe();
-        }
-
-        if (this.errorSubscription) {
-            this.errorSubscription.unsubscribe();
-        }
-    }
-
-    private async presentMsgToast(msg: string, color?: string) {
-        const toast = await this.toastController.create({
-            message: msg,
-            duration: 500,
-            color
-        });
-
-        await toast.present();
-    }
+    await toast.present();
+  }
 }

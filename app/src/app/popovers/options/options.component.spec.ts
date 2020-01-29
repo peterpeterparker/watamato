@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { OptionsComponent } from './options.component';
+import {OptionsComponent} from './options.component';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
@@ -9,7 +9,7 @@ describe('OptionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptionsComponent ],
+      declarations: [OptionsComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

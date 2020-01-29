@@ -5,16 +5,8 @@ import {IonicModule} from '@ionic/angular';
 import {TitleComponent} from './title.component';
 
 @NgModule({
-    declarations: [
-        TitleComponent
-    ],
-    imports: [
-        CommonModule,
-        IonicModule
-    ],
-    exports: [
-        TitleComponent
-    ]
+  declarations: [TitleComponent],
+  imports: [CommonModule, IonicModule],
+  exports: [TitleComponent]
 })
-export class TitleModule {
-}
+export class TitleModule {}

@@ -19,30 +19,30 @@ import {AngularFireAnalyticsModule, CONFIG} from '@angular/fire/analytics';
 import {DragulaModule} from 'ng2-dragula';
 
 @NgModule({
-    declarations: [AppComponent],
-    entryComponents: [],
-    imports: [
-        BrowserModule,
-        IonicModule.forRoot(),
-        AppRoutingModule,
-        AngularFireModule.initializeApp(environment.firebase),
-        AngularFireAuthModule,
-        AngularFirestoreModule,
-        AngularFireAnalyticsModule,
-        DragulaModule.forRoot()
-    ],
-    providers: [
-        StatusBar,
-        SplashScreen,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
-        {
-            provide: CONFIG, useValue: {
-                allow_ad_personalization_signals: false,
-                anonymize_ip: true
-            }
-        }
-    ],
-    bootstrap: [AppComponent]
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
+    AngularFireAnalyticsModule,
+    DragulaModule.forRoot()
+  ],
+  providers: [
+    StatusBar,
+    SplashScreen,
+    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+    {
+      provide: CONFIG,
+      useValue: {
+        allow_ad_personalization_signals: false,
+        anonymize_ip: true
+      }
+    }
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

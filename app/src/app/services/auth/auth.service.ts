@@ -6,26 +6,24 @@ import {User as FirebaseUser} from 'firebase';
 import {Observable} from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AuthService {
+  constructor(private angularFireAuth: AngularFireAuth) {}
 
-    constructor(private angularFireAuth: AngularFireAuth) {
-    }
+  anonymousLogin(): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await this.angularFireAuth.auth.signInAnonymously();
 
-    anonymousLogin(): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                await this.angularFireAuth.auth.signInAnonymously();
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 
-                resolve();
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
-
-    user(): Observable<FirebaseUser> {
-        return this.angularFireAuth.authState;
-    }
+  user(): Observable<FirebaseUser> {
+    return this.angularFireAuth.authState;
+  }
 }

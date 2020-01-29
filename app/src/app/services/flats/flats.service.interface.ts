@@ -3,14 +3,13 @@ import {Observable} from 'rxjs';
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
 export interface FlatsServiceInterface {
+  init(): Promise<void>;
 
-    init(): Promise<void>;
+  watchFlats(): Observable<UserFlat[]>;
 
-    watchFlats(): Observable<UserFlat[]>;
+  watchLastPageReached(): Observable<boolean>;
 
-    watchLastPageReached(): Observable<boolean>;
+  status(): UserFlatStatus;
 
-    status(): UserFlatStatus;
-
-    find(): Promise<void>;
+  find(): Promise<void>;
 }

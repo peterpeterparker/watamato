@@ -10,19 +10,8 @@ import {FlatModule} from '../flat/flat.module';
 import {OptionsModule} from '../../popovers/options/options.module';
 
 @NgModule({
-    declarations: [
-        FeedComponent
-    ],
-    imports: [
-        CommonModule,
-        IonicModule,
-        DragulaModule,
-        FlatModule,
-        OptionsModule
-    ],
-    exports: [
-        FeedComponent
-    ]
+  declarations: [FeedComponent],
+  imports: [CommonModule, IonicModule, DragulaModule, FlatModule, OptionsModule],
+  exports: [FeedComponent]
 })
-export class FeedModule {
-}
+export class FeedModule {}
