@@ -57,5 +57,5 @@
     "tslint": "~6.0.0",
     "typescript": "~3.4.3"
   },
-  "description": "An Ionic project"
+  "description": "A Trello look alike board for my flat hunting in Zürich."
 }
