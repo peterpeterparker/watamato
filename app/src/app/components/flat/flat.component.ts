@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 import {toDateObj} from '../../utils/date.utils';
 
@@ -14,8 +14,16 @@ export class FlatComponent {
     @Input()
     flat: UserFlat;
 
+    @Output()
+    options: EventEmitter<UIEvent> = new EventEmitter();
+
     toDateObj(flatDate): Date {
         return toDateObj(flatDate);
     }
 
+    openOptions($event: UIEvent) {
+        $event.stopPropagation();
+
+        this.options.emit($event);
+    }
 }

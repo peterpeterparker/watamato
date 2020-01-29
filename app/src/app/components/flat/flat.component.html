@@ -12,3 +12,7 @@
   <p>{{flat.data.location}}</p>
   <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
 </ion-card-content>
+
+<button (click)="openOptions($event)">
+  <ion-icon name="more"></ion-icon>
+</button>

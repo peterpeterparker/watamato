@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonInfiniteScroll, Platform, ToastController} from '@ionic/angular';
+import {IonInfiniteScroll, Platform, PopoverController, ToastController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
@@ -16,6 +16,7 @@ import {FlatsAppliedService} from '../../services/flats/flats.applied.service';
 import {FlatsRejectedService} from '../../services/flats/flats.rejected.service';
 import {FlatsViewingService} from '../../services/flats/flats.viewing.service';
 import {FlatsWinningService} from '../../services/flats/flats.winning.service';
+import {OptionsComponent} from '../../popovers/options/options.component';
 
 @Component({
     selector: 'app-feed',
@@ -51,6 +52,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     constructor(private dragulaService: DragulaService,
                 private platform: Platform,
                 private toastController: ToastController,
+                private popoverController: PopoverController,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
                 private flatsAppliedService: FlatsAppliedService,
@@ -244,5 +246,16 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     isMobile(): boolean {
         return this.platform.is('mobile');
+    }
+
+    async presentOptionsPopover($event: any, flat: UserFlat) {
+        const popover = await this.popoverController.create({
+            component: OptionsComponent,
+            event: $event,
+            translucent: true,
+            mode: 'ios'
+        });
+
+        await popover.present();
     }
 }

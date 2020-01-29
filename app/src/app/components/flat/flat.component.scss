@@ -1,0 +1,20 @@
+button {
+  border: none;
+  margin: 0;
+  padding: 8px 4px;
+  width: auto;
+  outline: none;
+
+  cursor: pointer;
+  user-select: none;
+
+  font-size: inherit;
+
+  background: inherit;
+
+  color: var(--ion-text-color);
+
+  position: absolute;
+  top: 0;
+  right: 0;
+}
