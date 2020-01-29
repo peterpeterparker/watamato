@@ -136,11 +136,15 @@ export class FeedComponent implements OnInit, OnDestroy {
 
             this.dragulaSubscription.add(this.dragulaService.drop('bag')
                 .subscribe(async ({el, target, source, sibling}) => {
-                    await this.userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+                    try {
+                        await this.userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
 
-                    await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
+                        await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
 
-                    await this.findAll();
+                        await this.findAll();
+                    } catch (err) {
+                        this.msgService.error('Oopsie something went wrong.');
+                    }
                 })
             );
 

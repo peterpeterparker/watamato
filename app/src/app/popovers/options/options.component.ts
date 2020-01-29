@@ -36,21 +36,29 @@ export class OptionsComponent implements OnInit {
     }
 
     async move(status: string) {
-        await this.userFlatsService.updateStatus(this.flat.id, status as UserFlatStatus);
+        try {
+            await this.userFlatsService.updateStatus(this.flat.id, status as UserFlatStatus);
 
-        await this.moveElement('div', status);
+            await this.moveElement('div', status);
 
-        await this.close();
+            await this.close();
+        } catch (err) {
+            this.msgService.error('Oopsie something went wrong.');
+        }
     }
 
     async delete() {
-        await this.userFlatsService.updateStatus(this.flat.id, UserFlatStatus.DISLIKED);
+        try {
+            await this.userFlatsService.updateStatus(this.flat.id, UserFlatStatus.DISLIKED);
 
-        await this.moveElement('section', 'disliked');
+            await this.moveElement('section', 'disliked');
 
-        this.msgService.msg('Deleted.');
+            this.msgService.msg('Deleted.');
 
-        await this.close();
+            await this.close();
+        } catch (err) {
+            this.msgService.error('Oopsie something went wrong.');
+        }
     }
 
     private moveElement(container: string, status: string): Promise<void> {
