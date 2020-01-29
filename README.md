@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://tietracker.com"><img src="src/assets/img/logo.svg" alt="Watamato logo" height="160"></a>
+  <a href="https://tietracker.com"><img src="app/src/assets/img/logo.svg" alt="Watamato logo" height="160"></a>
   
   <br/>
   
