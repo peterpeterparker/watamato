@@ -77,8 +77,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnDestroy() {
-    this.userService.destroy();
-
     if (this.msgSubscription) {
       this.msgSubscription.unsubscribe();
     }

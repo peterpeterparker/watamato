@@ -1,30 +1,28 @@
 import {Injectable} from '@angular/core';
 
-import {AngularFirestore, AngularFirestoreCollection, QueryDocumentSnapshot} from '@angular/fire/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 
-import {BehaviorSubject, Observable} from 'rxjs';
-import {filter, map, take} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
+import {filter, take} from 'rxjs/operators';
 
 import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
 import {User} from '../../model/user';
 
 import {UserService} from '../user/user.service';
 
-export interface FindFlats {
-  nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
-  query: Observable<UserFlat[]>;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class FlatsService {
-  private queryLimit = 2;
-  private until: Date | undefined = undefined;
+  private QUERY_LIMIT = 2;
 
   constructor(private fireStore: AngularFirestore, private userService: UserService) {}
 
-  find(nextQueryAfter: QueryDocumentSnapshot<UserFlatData>, status: UserFlatStatus, find: (result: FindFlats) => void) {
+  queryLimit(): number {
+    return this.QUERY_LIMIT;
+  }
+
+  find(nextQueryIndex: number, status: UserFlatStatus, find: (flats: UserFlat[]) => void) {
     try {
       this.userService
         .watch()
@@ -33,73 +31,42 @@ export class FlatsService {
           take(1)
         )
         .subscribe(async (user: User) => {
-          const collection: AngularFirestoreCollection<UserFlatData> = this.getCollectionQuery(user, nextQueryAfter, status);
+          const sortedIds: string[] = this.getSort(user, status);
 
-          collection
-            .get()
-            .pipe(take(1))
-            .subscribe(async (first) => {
-              nextQueryAfter = first.docs[first.docs.length - 1] as QueryDocumentSnapshot<UserFlatData>;
+          if (!sortedIds || sortedIds === undefined || sortedIds.length < nextQueryIndex + 1) {
+            // Nothing else to do, pagination is reached or there are no such flats for the specified status
+            find([]);
+          } else {
+            const paginationIds: string[] = sortedIds.splice(nextQueryIndex, this.QUERY_LIMIT);
 
-              find({
-                nextQueryAfter,
-                query: this.query(collection, nextQueryAfter)
-              });
+            const promises: Promise<UserFlat>[] = paginationIds.map((id: string) => {
+              return this.get(user.id, id);
             });
+
+            const userFlats: UserFlat[] = await Promise.all(promises);
+
+            find(userFlats);
+          }
         });
     } catch (err) {
       throw err;
     }
   }
 
-  private getCollectionQuery(
-    user: User,
-    nextQueryAfter: QueryDocumentSnapshot<UserFlatData>,
-    status: UserFlatStatus
-  ): AngularFirestoreCollection<UserFlatData> {
-    const collectionName = `/users/${user.id}/flats/`;
-
-    // We take the reference on the very first search (it takes time between init and user created)
-    if (this.until === undefined) {
-      this.until = new Date();
-    }
-
-    if (nextQueryAfter) {
-      return this.fireStore.collection<UserFlatData>(collectionName, (ref) =>
-        ref
-          .where('status', '==', status)
-          .where('updated_at', '<=', this.until)
-          .orderBy('updated_at', 'desc')
-          .startAfter(nextQueryAfter)
-          .limit(this.queryLimit)
-      );
+  private getSort(user: User, status: UserFlatStatus): string[] | undefined {
+    if (status === UserFlatStatus.WINNING) {
+      return user.data.winning_ids !== undefined ? [...user.data.winning_ids] : undefined;
+    } else if (status === UserFlatStatus.REJECTED) {
+      return user.data.rejected_ids !== undefined ? [...user.data.rejected_ids] : undefined;
+    } else if (status === UserFlatStatus.APPLIED) {
+      return user.data.applied_ids !== undefined ? [...user.data.applied_ids] : undefined;
+    } else if (status === UserFlatStatus.VIEWING) {
+      return user.data.viewing_ids !== undefined ? [...user.data.viewing_ids] : undefined;
+    } else if (status === UserFlatStatus.DISLIKED) {
+      return user.data.disliked_ids !== undefined ? [...user.data.disliked_ids] : undefined;
     } else {
-      return this.fireStore.collection<UserFlatData>(collectionName, (ref) =>
-        ref
-          .where('status', '==', status)
-          .where('updated_at', '<=', this.until)
-          .orderBy('updated_at', 'desc')
-          .limit(this.queryLimit)
-      );
+      return user.data.new_ids !== undefined ? [...user.data.new_ids] : undefined;
     }
-  }
-
-  private query(collection: AngularFirestoreCollection<UserFlatData>, nextQueryAfter: QueryDocumentSnapshot<UserFlatData>): Observable<UserFlat[]> {
-    return collection.snapshotChanges().pipe(
-      map((actions) => {
-        return actions.map((a) => {
-          const data: UserFlatData = a.payload.doc.data() as UserFlatData;
-          const id = a.payload.doc.id;
-          const ref = a.payload.doc.ref;
-
-          return {
-            id,
-            ref,
-            data
-          };
-        });
-      })
-    );
   }
 
   addFlats(flats: UserFlat[], flatsSubject: BehaviorSubject<UserFlat[] | undefined>, lastPageReached: BehaviorSubject<boolean>): Promise<void> {
@@ -119,6 +86,30 @@ export class FlatsService {
 
           resolve();
         });
+    });
+  }
+
+  private get(userId: string, userFlatId: string): Promise<UserFlat> {
+    return new Promise<UserFlat>(async (resolve, reject) => {
+      const doc: AngularFirestoreDocument<UserFlatData> = this.fireStore.collection<UserFlatData>(`/users/${userId}/flats/`).doc<UserFlatData>(userFlatId);
+
+      doc
+        .valueChanges()
+        .pipe(take(1))
+        .subscribe(
+          (data: UserFlatData) => {
+            const userFlat: UserFlat = {
+              id: userFlatId,
+              ref: doc.ref,
+              data
+            };
+
+            resolve(userFlat);
+          },
+          (err) => {
+            reject(err);
+          }
+        );
     });
   }
 }

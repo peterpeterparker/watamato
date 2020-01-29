@@ -18,7 +18,37 @@ import {UserService} from './user.service';
 export class UserFlatsService {
   constructor(private fireStore: AngularFirestore, private userService: UserService) {}
 
-  updateStatus(flatId: string, status: UserFlatStatus): Promise<void> {
+  update(flatId: string, status: UserFlatStatus, position?: number): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      if (!flatId || flatId === undefined || flatId === '') {
+        reject('No flat id');
+        return;
+      }
+
+      try {
+        // prettier-ignore
+        // @ts-ignore
+        const data: UserFlatData = {
+          status,
+          updated_at: firebase.firestore.Timestamp.now()
+        };
+
+        if (position !== undefined) {
+          data.position = position;
+        }
+
+        // prettier-ignore
+        // @ts-ignore
+        await this.updateData(flatId, data);
+
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  private updateData(flatId: string, data: UserFlatData): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       if (!flatId || flatId === undefined || flatId === '') {
         reject('No flat id');
@@ -34,12 +64,8 @@ export class UserFlatsService {
           )
           .subscribe(async (user: User) => {
             const doc: AngularFirestoreDocument<UserFlatData> = this.fireStore.doc<UserFlatData>(`/users/${user.id}/flats/${flatId}`);
-            // prettier-ignore
-            // @ts-ignore
-            await doc.set({
-                status,
-                updated_at: firebase.firestore.Timestamp.now()
-                    }, {merge: true});
+
+            await doc.set(data, {merge: true});
 
             resolve();
           });
