@@ -5,6 +5,17 @@ ion-router-outlet {
     main {
       overflow-x: scroll;
       overflow-y: hidden;
+
+      &.loading {
+        height: 100%;
+
+        color: var(--ion-color-light);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 }
