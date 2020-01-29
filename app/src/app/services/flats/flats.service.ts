@@ -57,14 +57,14 @@ export class FlatsService {
         if (nextQueryAfter) {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
                 ref.where('status', '==', status)
-                    .where('updated_at', '<', this.until)
+                    .where('updated_at', '<=', this.until)
                     .orderBy('updated_at', 'desc')
                     .startAfter(nextQueryAfter)
                     .limit(this.queryLimit));
         } else {
             return this.fireStore.collection<UserFlatData>(collectionName, ref =>
                 ref.where('status', '==', status)
-                    .where('updated_at', '<', this.until)
+                    .where('updated_at', '<=', this.until)
                     .orderBy('updated_at', 'desc')
                     .limit(this.queryLimit));
         }
