@@ -1,13 +1,15 @@
-import {firestore} from 'firebase-admin';
+import { firestore } from "firebase-admin";
 
 interface UserData {
-    created_at: firestore.Timestamp;
-    updated_at: firestore.Timestamp;
+  new_ids: string[] | firestore.FieldValue;
+
+  created_at?: firestore.Timestamp;
+  updated_at: firestore.Timestamp;
 }
 
 interface User {
-    id: string;
-    ref: firestore.DocumentReference;
+  id: string;
+  ref: firestore.DocumentReference;
 
-    data: UserData;
+  data: UserData;
 }
