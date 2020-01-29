@@ -53,7 +53,7 @@ export class OptionsComponent implements OnInit {
 
             await this.moveElement('section', 'disliked');
 
-            this.msgService.msg('Deleted.');
+            this.msgService.msg('Removed.');
 
             await this.close();
         } catch (err) {

@@ -7,6 +7,7 @@ import {RouterModule} from '@angular/router';
 import {HomePage} from './home.page';
 
 import {FeedModule} from '../../components/feed/feed.module';
+import {TitleModule} from '../../components/title/title.module';
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import {FeedModule} from '../../components/feed/feed.module';
                 component: HomePage
             }
         ]),
-        FeedModule
+        FeedModule,
+        TitleModule
     ],
     declarations: [HomePage]
 })

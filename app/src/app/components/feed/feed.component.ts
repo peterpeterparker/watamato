@@ -241,7 +241,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.msgService.msg('Deleted.');
+        this.msgService.msg('Removed.');
     }
 
     isMobile(): boolean {

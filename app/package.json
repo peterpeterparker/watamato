@@ -1,8 +1,8 @@
 {
-  "name": "fckimmo",
+  "name": "watamato",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "David Dal Busco",
+  "homepage": "https://watamato.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
