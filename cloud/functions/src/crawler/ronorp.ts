@@ -241,8 +241,10 @@ async function filterSearch(page: Page) {
     'input[name="fdata[sp_realty_price_from]"][attr_label="1400"]'
   );
 
-  // Activated for max value
-  // await page.evaluate((selector) => document.querySelector(selector).click(), 'input[name="fdata[sp_realty_price_to]"][attr_label="1900"]');
+  await page.evaluate(
+    selector => document.querySelector(selector).click(),
+    'input[name="fdata[sp_realty_price_to]"][attr_label="2000"]'
+  );
 
   await page.evaluate(
     selector => document.querySelector(selector).click(),
