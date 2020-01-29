@@ -1,7 +1,7 @@
 <deckgo-lazy-img imgSrc="{{ flat.data.image_url }}" img-alt="Cover image"></deckgo-lazy-img>
 
 <section>
-  <ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
+  <ion-badge [ngClass]="flat.data.source">{{ flat.data.source }}</ion-badge>
 
   <button (click)="openOptions($event)" slot="end" *ngIf="mobile">
     <ion-icon name="more" aria-label="Options"></ion-icon>

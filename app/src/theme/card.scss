@@ -17,9 +17,14 @@ body {
       ion-badge {
         padding: 2px 8px;
         font-weight: 300;
+        text-transform: capitalize;
 
         &.ronorp {
           background: #d55e8b;
+        }
+
+        &.homegate {
+          background: #ea3d43;
         }
       }
 
