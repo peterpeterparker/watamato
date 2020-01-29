@@ -17,6 +17,7 @@ import {FlatsRejectedService} from '../../services/flats/flats.rejected.service'
 import {FlatsViewingService} from '../../services/flats/flats.viewing.service';
 import {FlatsWinningService} from '../../services/flats/flats.winning.service';
 import {OptionsComponent} from '../../popovers/options/options.component';
+import {MsgService} from '../../services/msg/msg.service';
 
 @Component({
     selector: 'app-feed',
@@ -51,14 +52,14 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     constructor(private dragulaService: DragulaService,
                 private platform: Platform,
-                private toastController: ToastController,
                 private popoverController: PopoverController,
                 private userFlatsService: UserFlatsService,
                 private flatsNewService: FlatsNewService,
                 private flatsAppliedService: FlatsAppliedService,
                 private flatsViewingService: FlatsViewingService,
                 private flatsRejectedService: FlatsRejectedService,
-                private flatsWinningService: FlatsWinningService) {
+                private flatsWinningService: FlatsWinningService,
+                private msgService: MsgService) {
 
     }
 
@@ -236,12 +237,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const toast = await this.toastController.create({
-            message: 'Deleted.',
-            duration: 500
-        });
-
-        await toast.present();
+        this.msgService.msg('Deleted.');
     }
 
     isMobile(): boolean {

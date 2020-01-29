@@ -4,6 +4,7 @@ import {NavParams, PopoverController} from '@ionic/angular';
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
 import {UserFlatsService} from '../../services/user/user.flats.service';
+import {MsgService} from '../../services/msg/msg.service';
 
 @Component({
     selector: 'app-options',
@@ -19,7 +20,8 @@ export class OptionsComponent implements OnInit {
 
     constructor(private navParams: NavParams,
                 private popoverController: PopoverController,
-                private userFlatsService: UserFlatsService) {
+                private userFlatsService: UserFlatsService,
+                private msgService: MsgService) {
     }
 
     ngOnInit() {
@@ -46,14 +48,14 @@ export class OptionsComponent implements OnInit {
 
         await this.moveElement('section', 'disliked');
 
+        this.msgService.msg('Deleted.');
+
         await this.close();
     }
 
     private moveElement(container: string, status: string): Promise<void> {
         return new Promise<void>((resolve) => {
             const column: HTMLDivElement = document.querySelector(`${container}[status="${status}"]`);
-
-            console.log(column);
 
             if (!column) {
                 resolve();
