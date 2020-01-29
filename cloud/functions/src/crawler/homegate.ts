@@ -1,8 +1,10 @@
 import { Browser, launch, Page } from "puppeteer";
 
-import { FlatData } from "../model/flat";
-import { plzUrl } from "../utils/crawler.utils";
 import { JSDOM } from "jsdom";
+
+import { FlatData } from "../model/flat";
+
+import { plzUrl } from "../utils/crawler.utils";
 
 export async function crawlHomegate(): Promise<FlatData[] | undefined> {
   const browser: Browser = await launch({ args: ["--no-sandbox"] });
@@ -10,17 +12,27 @@ export async function crawlHomegate(): Promise<FlatData[] | undefined> {
   const page: Page = await browser.newPage();
   await page.setViewport({ width: 960, height: 768 });
 
-  await goToWohnung(page);
+  await goToWohnung(page, 1);
+  const elementsPage1: FlatData[] | undefined = await findElements(page);
 
-  let elements: FlatData[] | undefined = await findElements(page);
+  await goToWohnung(page, 2);
+  const elementsPage2: FlatData[] | undefined = await findElements(page);
 
   await browser.close();
 
-  return elements;
+  return elementsPage1 !== undefined
+    ? elementsPage2
+      ? [...elementsPage2, ...elementsPage1]
+      : elementsPage1
+    : elementsPage2;
 }
 
-async function goToWohnung(page: Page) {
-  const url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=1400`;
+async function goToWohnung(page: Page, index: number) {
+  let url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=1400&ah=2000`;
+
+  if (index > 1) {
+    url += `&ep=${index}`;
+  }
 
   await page.goto(url, {
     waitUntil: "networkidle0"
