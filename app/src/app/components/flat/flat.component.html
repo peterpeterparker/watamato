@@ -1,6 +1,12 @@
 <img [src]="flat.data.image_url"/>
 
-<ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
+<section>
+  <ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
+
+  <button (click)="openOptions($event)" slot="end">
+    <ion-icon name="more" aria-label="Options"></ion-icon>
+  </button>
+</section>
 
 <ion-card-header>
   <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
@@ -12,7 +18,3 @@
   <p>{{flat.data.location}}</p>
   <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
 </ion-card-content>
-
-<button (click)="openOptions($event)">
-  <ion-icon name="more"></ion-icon>
-</button>

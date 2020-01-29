@@ -5,13 +5,37 @@ body {
 
     cursor: pointer;
 
-    ion-badge {
-      margin: 16px 16px 0;
-      padding: 2px 8px;
-      font-weight: 300;
+    section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-      &.ronorp {
-        background: #d55e8b;
+      margin: 16px 16px 0;
+
+      position: relative;
+
+      ion-badge {
+        padding: 2px 8px;
+        font-weight: 300;
+
+        &.ronorp {
+          background: #d55e8b;
+        }
+      }
+
+      button {
+        border: none;
+        margin: 0;
+        padding: 0;
+        width: auto;
+        outline: none;
+
+        cursor: pointer;
+        user-select: none;
+
+        font-size: inherit;
+
+        background: none;
       }
     }
 
