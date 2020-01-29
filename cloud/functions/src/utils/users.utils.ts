@@ -88,3 +88,27 @@ export function findAllUsers(): Promise<User[] | undefined> {
     }
   });
 }
+
+export function findUser(userId: string): Promise<User> {
+  return new Promise<User>(async (resolve, reject) => {
+    try {
+      const snapshot: admin.firestore.DocumentSnapshot = await admin
+        .firestore()
+        .doc(`/users/${userId}`)
+        .get();
+
+      if (!snapshot.exists) {
+        reject("User not found");
+        return;
+      }
+
+      resolve({
+        id: snapshot.id,
+        ref: snapshot.ref,
+        data: snapshot.data() as UserData
+      });
+    } catch (err) {
+      reject(err);
+    }
+  });
+}

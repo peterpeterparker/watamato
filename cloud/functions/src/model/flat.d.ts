@@ -10,6 +10,7 @@ interface FlatData {
   published_at: Date;
 
   source: "ronorp" | "homegate";
+  position?: number;
 
   created_at?: firestore.Timestamp;
   updated_at?: firestore.Timestamp;
