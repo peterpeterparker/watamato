@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 
-import {QueryDocumentSnapshot} from '@angular/fire/firestore';
-
 import {BehaviorSubject, Observable} from 'rxjs';
 import {take} from 'rxjs/operators';
 
-import {UserFlat, UserFlatData, UserFlatStatus} from '../../model/user.flat';
+import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
-import {FindFlats, FlatsService} from './flats.service';
+import {FlatsService} from './flats.service';
 
 import {FlatsServiceInterface} from './flats.service.interface';
 
@@ -18,7 +16,7 @@ export class FlatsWinningService implements FlatsServiceInterface {
   private flatsSubject: BehaviorSubject<UserFlat[] | undefined> = new BehaviorSubject(undefined);
   private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-  private nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
+  private nextQueryIndex = 0;
 
   constructor(private flatsService: FlatsService) {}
 
@@ -41,16 +39,14 @@ export class FlatsWinningService implements FlatsServiceInterface {
   async find() {
     this.lastPageReached.pipe(take(1)).subscribe(async (reached: boolean) => {
       if (!reached) {
-        await this.flatsService.find(this.nextQueryAfter, this.status(), this.findFlats);
+        await this.flatsService.find(this.nextQueryIndex, this.status(), this.findFlats);
       }
     });
   }
 
-  private findFlats = async (result: FindFlats) => {
-    this.nextQueryAfter = result.nextQueryAfter;
+  private findFlats = async (flats: UserFlat[]) => {
+    this.nextQueryIndex = this.nextQueryIndex + this.flatsService.queryLimit();
 
-    result.query.pipe(take(1)).subscribe(async (flats: UserFlat[]) => {
-      await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
-    });
+    await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
   };
 }
