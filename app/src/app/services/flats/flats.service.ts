@@ -39,8 +39,6 @@ export class FlatsService {
           } else {
             const paginationIds: string[] = sortedIds.splice(nextQueryIndex, this.QUERY_LIMIT);
 
-            console.log(paginationIds);
-
             const promises: Promise<UserFlat>[] = paginationIds.map((id: string) => {
               return this.get(user.id, id);
             });

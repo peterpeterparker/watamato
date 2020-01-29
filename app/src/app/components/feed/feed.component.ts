@@ -136,7 +136,10 @@ export class FeedComponent implements OnInit, OnDestroy {
       this.dragulaSubscription.add(
         this.dragulaService.drop('bag').subscribe(async ({el, target, source, sibling}) => {
           try {
-            await this.userFlatsService.updateStatus(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus);
+            // Index of the card in its new column
+            const index = [...Array.from(el.parentElement.children)].indexOf(el);
+
+            await this.userFlatsService.update(el.getAttribute('key'), target.getAttribute('status') as UserFlatStatus, index);
 
             await this.presentDeleteToast(target.getAttribute('status') as UserFlatStatus);
 

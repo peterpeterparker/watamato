@@ -37,7 +37,7 @@ export class OptionsComponent implements OnInit {
 
   async move(status: string) {
     try {
-      await this.userFlatsService.updateStatus(this.flat.id, status as UserFlatStatus);
+      await this.userFlatsService.update(this.flat.id, status as UserFlatStatus);
 
       await this.moveElement('div', status);
 
@@ -49,7 +49,7 @@ export class OptionsComponent implements OnInit {
 
   async delete() {
     try {
-      await this.userFlatsService.updateStatus(this.flat.id, UserFlatStatus.DISLIKED);
+      await this.userFlatsService.update(this.flat.id, UserFlatStatus.DISLIKED);
 
       await this.moveElement('section', 'disliked');
 
