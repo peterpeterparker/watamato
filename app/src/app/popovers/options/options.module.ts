@@ -7,16 +7,8 @@ import {IonicModule} from '@ionic/angular';
 import {OptionsComponent} from './options.component';
 
 @NgModule({
-    declarations: [
-        OptionsComponent
-    ],
-    imports: [
-        IonicModule,
-        CommonModule
-    ],
-    entryComponents: [
-        OptionsComponent
-    ]
+  declarations: [OptionsComponent],
+  imports: [IonicModule, CommonModule],
+  entryComponents: [OptionsComponent]
 })
-export class OptionsModule {
-}
+export class OptionsModule {}

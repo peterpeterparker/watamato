@@ -12,48 +12,45 @@ import {FindFlats, FlatsService} from './flats.service';
 import {FlatsServiceInterface} from './flats.service.interface';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class FlatsRejectedService implements FlatsServiceInterface {
+  private flatsSubject: BehaviorSubject<UserFlat[] | undefined> = new BehaviorSubject(undefined);
+  private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-    private flatsSubject: BehaviorSubject<UserFlat[] | undefined> = new BehaviorSubject(undefined);
-    private lastPageReached: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
 
-    private nextQueryAfter: QueryDocumentSnapshot<UserFlatData>;
+  constructor(private flatsService: FlatsService) {}
 
-    constructor(private flatsService: FlatsService) {
+  async init() {
+    await this.find();
+  }
 
-    }
+  watchFlats(): Observable<UserFlat[]> {
+    return this.flatsSubject.asObservable();
+  }
 
-    async init() {
-        await this.find();
-    }
+  watchLastPageReached(): Observable<boolean> {
+    return this.lastPageReached.asObservable();
+  }
 
-    watchFlats(): Observable<UserFlat[]> {
-        return this.flatsSubject.asObservable();
-    }
+  status(): UserFlatStatus {
+    return UserFlatStatus.REJECTED;
+  }
 
-    watchLastPageReached(): Observable<boolean> {
-        return this.lastPageReached.asObservable();
-    }
+  async find() {
+    this.lastPageReached.pipe(take(1)).subscribe(async (reached: boolean) => {
+      if (!reached) {
+        await this.flatsService.find(this.nextQueryAfter, this.status(), this.findFlats);
+      }
+    });
+  }
 
-    status(): UserFlatStatus {
-        return UserFlatStatus.REJECTED;
-    }
+  private findFlats = async (result: FindFlats) => {
+    this.nextQueryAfter = result.nextQueryAfter;
 
-    async find() {
-        this.lastPageReached.pipe(take(1)).subscribe(async (reached: boolean) => {
-            if (!reached) {
-                await this.flatsService.find(this.nextQueryAfter, this.status(), this.findFlats);
-            }
-        });
-    }
-
-    private findFlats = async (result: FindFlats) => {
-        this.nextQueryAfter = result.nextQueryAfter;
-
-        result.query.pipe(take(1)).subscribe(async (flats: UserFlat[]) => {
-            await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
-        });
-    };
+    result.query.pipe(take(1)).subscribe(async (flats: UserFlat[]) => {
+      await this.flatsService.addFlats(flats, this.flatsSubject, this.lastPageReached);
+    });
+  };
 }

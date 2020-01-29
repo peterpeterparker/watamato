@@ -13,37 +13,39 @@ import {UserFlatData, UserFlatStatus} from '../../model/user.flat';
 import {UserService} from './user.service';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class UserFlatsService {
+  constructor(private fireStore: AngularFirestore, private userService: UserService) {}
 
-    constructor(private fireStore: AngularFirestore,
-                private userService: UserService) {
+  updateStatus(flatId: string, status: UserFlatStatus): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if (!flatId || flatId === undefined || flatId === '') {
+        reject('No flat id');
+        return;
+      }
 
-    }
-
-    updateStatus(flatId: string, status: UserFlatStatus): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (!flatId || flatId === undefined || flatId === '') {
-                reject('No flat id');
-                return;
-            }
-
-            try {
-                this.userService.watch().pipe(filter(user => user !== undefined), take(1)).subscribe(async (user: User) => {
-                    const doc: AngularFirestoreDocument<UserFlatData> = this.fireStore.doc<UserFlatData>(`/users/${user.id}/flats/${flatId}`);
-                    // @ts-ignore
-                    await doc.set({
-                        status,
-                        updated_at: firebase.firestore.Timestamp.now()
+      try {
+        this.userService
+          .watch()
+          .pipe(
+            filter((user) => user !== undefined),
+            take(1)
+          )
+          .subscribe(async (user: User) => {
+            const doc: AngularFirestoreDocument<UserFlatData> = this.fireStore.doc<UserFlatData>(`/users/${user.id}/flats/${flatId}`);
+            // prettier-ignore
+            // @ts-ignore
+            await doc.set({
+                status,
+                updated_at: firebase.firestore.Timestamp.now()
                     }, {merge: true});
 
-                    resolve();
-                });
-            } catch (err) {
-                reject(err);
-            }
-        });
-    }
-
+            resolve();
+          });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
 }

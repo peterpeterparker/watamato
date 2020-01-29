@@ -10,20 +10,19 @@ import {FeedModule} from '../../components/feed/feed.module';
 import {TitleModule} from '../../components/title/title.module';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        RouterModule.forChild([
-            {
-                path: '',
-                component: HomePage
-            }
-        ]),
-        FeedModule,
-        TitleModule
-    ],
-    declarations: [HomePage]
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: HomePage
+      }
+    ]),
+    FeedModule,
+    TitleModule
+  ],
+  declarations: [HomePage]
 })
-export class HomePageModule {
-}
+export class HomePageModule {}

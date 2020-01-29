@@ -1,4 +1,4 @@
-<deckgo-lazy-img imgSrc="{{flat.data.image_url}}" img-alt="Cover image"></deckgo-lazy-img>
+<deckgo-lazy-img imgSrc="{{ flat.data.image_url }}" img-alt="Cover image"></deckgo-lazy-img>
 
 <section>
   <ion-badge [class.ronorp]="flat.data.source === 'ronorp'">Ronorp</ion-badge>
@@ -9,13 +9,13 @@
 </section>
 
 <ion-card-header>
-  <ion-card-title>{{flat.data.title}}</ion-card-title>
+  <ion-card-title>{{ flat.data.title }}</ion-card-title>
 </ion-card-header>
 
 <ion-card-content>
-  <p>{{flat.data.rooms}} rooms</p>
-  <p>{{flat.data.location}}</p>
-  <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
+  <p>{{ flat.data.rooms }} rooms</p>
+  <p>{{ flat.data.location }}</p>
+  <p>{{ flat.data.price | currency: 'CHF':'symbol':'4.2-2' }}</p>
 
-  <p class="published-at">Published the {{toDateObj(flat.data.published_at) | date: 'short'}}</p>
+  <p class="published-at">Published the {{ toDateObj(flat.data.published_at) | date: 'short' }}</p>
 </ion-card-content>

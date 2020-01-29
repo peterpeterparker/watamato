@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { TitleComponent } from './title.component';
+import {TitleComponent} from './title.component';
 
 describe('TitleComponent', () => {
   let component: TitleComponent;
@@ -9,7 +9,7 @@ describe('TitleComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TitleComponent ],
+      declarations: [TitleComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

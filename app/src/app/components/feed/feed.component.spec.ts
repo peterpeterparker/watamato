@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { FeedComponent } from './feed.component';
+import {FeedComponent} from './feed.component';
 
 describe('FeedComponent', () => {
   let component: FeedComponent;
@@ -9,7 +9,7 @@ describe('FeedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedComponent ],
+      declarations: [FeedComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 

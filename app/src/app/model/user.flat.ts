@@ -1,38 +1,38 @@
 import {DocumentReference} from '@angular/fire/firestore';
 
 export enum UserFlatStatus {
-    NEW = 'new',
-    DISLIKED = 'disliked',
-    VIEWING = 'viewing',
-    APPLIED = 'applied',
-    REJECTED = 'rejected',
-    WINNING = 'winning'
+  NEW = 'new',
+  DISLIKED = 'disliked',
+  VIEWING = 'viewing',
+  APPLIED = 'applied',
+  REJECTED = 'rejected',
+  WINNING = 'winning'
 }
 
 export enum UserFlatSource {
-    RONORP = 'ronorp'
+  RONORP = 'ronorp'
 }
 
 export interface UserFlatData {
-    url: string | null;
-    image_url: string | null;
-    title: string | null;
-    location: string | null;
-    rooms: number;
-    price: number;
-    published_at: Date;
+  url: string | null;
+  image_url: string | null;
+  title: string | null;
+  location: string | null;
+  rooms: number;
+  price: number;
+  published_at: Date;
 
-    source: UserFlatSource;
+  source: UserFlatSource;
 
-    status: UserFlatStatus;
+  status: UserFlatStatus;
 
-    created_at: firebase.firestore.Timestamp;
-    updated_at: firebase.firestore.Timestamp;
+  created_at: firebase.firestore.Timestamp;
+  updated_at: firebase.firestore.Timestamp;
 }
 
 export interface UserFlat {
-    id: string;
-    ref: DocumentReference;
+  id: string;
+  ref: DocumentReference;
 
-    data: UserFlatData;
+  data: UserFlatData;
 }

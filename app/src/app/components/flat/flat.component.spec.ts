@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {IonicModule} from '@ionic/angular';
 
-import { FlatComponent } from './flat.component';
+import {FlatComponent} from './flat.component';
 
 describe('FlatComponent', () => {
   let component: FlatComponent;
@@ -9,7 +9,7 @@ describe('FlatComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FlatComponent ],
+      declarations: [FlatComponent],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
