@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {IonInfiniteScroll, Platform, PopoverController, ToastController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
@@ -248,10 +248,14 @@ export class FeedComponent implements OnInit, OnDestroy {
         return this.platform.is('mobile');
     }
 
-    async presentOptionsPopover($event: any, flat: UserFlat) {
+    async presentOptionsPopover($event: {$event: UIEvent, elementRef: HTMLElement}, flat: UserFlat) {
         const popover = await this.popoverController.create({
             component: OptionsComponent,
-            event: $event,
+            componentProps: {
+                cardRef: $event.elementRef.parentElement,
+                flat
+            },
+            event: $event.$event,
             translucent: true,
             mode: 'ios'
         });
