@@ -14,6 +14,7 @@ import {environment} from '../environments/environment';
 
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireAnalyticsModule, CONFIG} from '@angular/fire/analytics';
 
 import {DragulaModule} from 'ng2-dragula';
 
@@ -27,12 +28,19 @@ import {DragulaModule} from 'ng2-dragula';
         AngularFireModule.initializeApp(environment.firebase),
         AngularFireAuthModule,
         AngularFirestoreModule,
+        AngularFireAnalyticsModule,
         DragulaModule.forRoot()
     ],
     providers: [
         StatusBar,
         SplashScreen,
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
+        {
+            provide: CONFIG, useValue: {
+                allow_ad_personalization_signals: false,
+                anonymize_ip: true
+            }
+        }
     ],
     bootstrap: [AppComponent]
 })
