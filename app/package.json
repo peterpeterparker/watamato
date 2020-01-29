@@ -4,9 +4,10 @@
   "author": "David Dal Busco",
   "homepage": "https://watamato.com/",
   "scripts": {
+    "config": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/config.index.ts",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "npm run config && ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -44,7 +45,7 @@
     "@ionic/angular-toolkit": "^2.1.2",
     "@types/jasmine": "~3.5.1",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "~13.5.0",
+    "@types/node": "^13.5.1",
     "codelyzer": "^5.2.1",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
