@@ -9,7 +9,6 @@
 </section>
 
 <ion-card-header>
-  <ion-card-subtitle>{{toDateObj(flat.data.published_at) | date: 'short'}}</ion-card-subtitle>
   <ion-card-title>{{flat.data.title}}</ion-card-title>
 </ion-card-header>
 
@@ -17,4 +16,6 @@
   <p>{{flat.data.rooms}} rooms</p>
   <p>{{flat.data.location}}</p>
   <p>{{flat.data.price | currency:'CHF':'symbol':'4.2-2'}}</p>
+
+  <p class="published-at">Published the {{toDateObj(flat.data.published_at) | date: 'short'}}</p>
 </ion-card-content>

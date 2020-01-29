@@ -42,8 +42,13 @@ body {
       }
     }
 
-    ion-card-subtitle, p {
+    p {
       font-size: 0.8rem;
+
+      &.published-at {
+        margin-top: 16px;
+        font-size: 0.5rem;
+      }
     }
 
     ion-card-title {
