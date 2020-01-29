@@ -1,6 +1,26 @@
+:host {
+  background: white;
+}
+
+ion-list.list-ios {
+  margin-bottom: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 ion-list {
+  ion-item-divider {
+    border-color: transparent;
+    background: transparent;
+  }
+
   ion-item {
     --padding-end: 16px;
     cursor: pointer;
+    --border-color: transparent;
+
+    &:hover, &:active {
+      --color: var(--ion-color-primary);
+    }
   }
 }
