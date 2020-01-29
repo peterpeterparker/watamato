@@ -10,9 +10,9 @@ const envConfigFile = `export const environment = {
         databaseURL: 'https://watamato-app.firebaseio.com',
         projectId: 'watamato-app',
         storageBucket: 'watamato-app.appspot.com',
-        messagingSenderId: '${process.env.FIREBASE_MESSAGING_SENDER_ID}',
-        appId: '${process.env.FIREBASE_APP_ID}',
-        measurementId: '${process.env.FIREBASE_MEASUREMENT_ID}'
+        messagingSenderId: '186771088317',
+        appId: '1:186771088317:web:431aec6d0cade214d4e8d4',
+        measurementId: 'G-XY72KL25LS'
     }
 };
 `;
