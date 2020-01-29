@@ -62,6 +62,8 @@ export class FlatsService {
       return user.data.applied_ids !== undefined ? [...user.data.applied_ids] : undefined;
     } else if (status === UserFlatStatus.VIEWING) {
       return user.data.viewing_ids !== undefined ? [...user.data.viewing_ids] : undefined;
+    } else if (status === UserFlatStatus.DISLIKED) {
+      return user.data.disliked_ids !== undefined ? [...user.data.disliked_ids] : undefined;
     } else {
       return user.data.new_ids !== undefined ? [...user.data.new_ids] : undefined;
     }
