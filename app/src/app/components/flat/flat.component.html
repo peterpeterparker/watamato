@@ -9,7 +9,7 @@
 </section>
 
 <ion-card-header>
-  <ion-card-title>{{ flat.data.title }}</ion-card-title>
+  <ion-card-title>{{ flat.data.title && flat.data.title.length > 100 ? (flat.data.title | slice: 0:100) + '...' : flat.data.title }}</ion-card-title>
 </ion-card-header>
 
 <ion-card-content>
