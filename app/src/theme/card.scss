@@ -24,11 +24,14 @@ body {
       }
 
       button {
+        position: relative;
+
         border: none;
         margin: 0;
-        padding: 0;
-        width: auto;
+        padding: 8px;
         outline: none;
+
+        width: auto;
 
         cursor: pointer;
         user-select: none;
