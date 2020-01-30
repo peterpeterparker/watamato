@@ -1,0 +1,43 @@
+ion-content {
+  --ion-background-color: white;
+
+  main {
+    max-width: 720px;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    deckgo-lazy-img {
+      --deckgo-lazy-img-height: 260px;
+      --deckgo-lazy-img-display: block;
+      --deckgo-lazy-img-border-radius: 50%;
+      --deckgo-lazy-img-box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+      display: inline-block;
+
+      margin-top: 32px;
+
+      background-image: linear-gradient(transparent 0%, transparent calc(50% - 9px), rgba(2, 106, 167, 0.35) calc(50% - 9px), rgba(2, 106, 167, 0.35) 100%);
+      background-size: 100% 200%;
+      background-position: 0 0;
+    }
+
+    p {
+      line-height: 1.4rem;
+
+      a {
+        background-image: linear-gradient(transparent 0%, transparent calc(50% - 9px), rgba(2, 106, 167, 0.35) calc(50% - 9px), rgba(2, 106, 167, 0.35) 100%);
+        background-size: 100% 250%;
+        background-position: 0 0;
+        text-decoration: none;
+        color: black;
+      }
+    }
+  }
+}
