@@ -11,12 +11,12 @@ main {
   background: var(--ion-color-light);
 
   section {
-    max-width: 720px;
+    max-width: 960px;
     margin: auto;
 
     display: grid;
     grid-gap: 8px;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     grid-template-rows: auto;
     justify-items: center;
 
@@ -48,15 +48,30 @@ main {
         text-decoration: none;
         color: black;
         position: relative;
+      }
 
-        &:after {
-          position: absolute;
-          content: "";
-          width: 100%;
-          top: 100%;
-          left: 0;
-          height: 0.0625rem;
-          background-color: currentcolor;
+      &:not(.social) {
+        a {
+          &:after {
+            position: absolute;
+            content: "";
+            width: 100%;
+            top: 100%;
+            left: 0;
+            height: 0.0625rem;
+            background-color: currentcolor;
+          }
+        }
+      }
+
+      &.social {
+        ion-icon {
+          font-size: 1.2rem;
+          padding: 4px;
+
+          &:first-of-type {
+            padding-left: 0;
+          }
         }
       }
     }
