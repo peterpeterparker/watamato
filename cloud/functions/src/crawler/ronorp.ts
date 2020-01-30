@@ -91,21 +91,10 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
   const results: FlatData[] = elements
     .filter((element: string) => {
       const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
-      const dateChild = dom.window.document.querySelector(
-        "div.user div.pull-left"
-      );
 
       const link = dom.window.document.querySelector("a.image-wrapper");
 
-      return (
-        link !== undefined &&
-        filterPlz(dom) &&
-        dateChild &&
-        dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g)
-      );
-
-      // Match a date example
-      // return dateChild && dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
+      return link !== undefined && filterPlz(dom) && filterDate(dom);
     })
     .map((element: string) => {
       const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
@@ -168,6 +157,33 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
     });
 
   return results;
+}
+
+function filterDate(dom: JSDOM): boolean {
+  const dateChild = dom.window.document.querySelector("div.user div.pull-left");
+
+  if (!dateChild) {
+    return false;
+  }
+
+  if (dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g)) {
+    return true;
+  }
+
+  if (
+    !dateChild.innerHTML.match(
+      /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g
+    )
+  ) {
+    return false;
+  }
+
+  const yesterday: Date = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  // dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
+
+  return yesterday.toLocaleDateString("de-CH") === dateChild.innerHTML;
 }
 
 function filterPlz(dom: JSDOM): boolean {
