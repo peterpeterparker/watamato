@@ -4,7 +4,7 @@
   <ion-badge [ngClass]="flat.data.source">{{ flat.data.source }}</ion-badge>
 
   <button (click)="openOptions($event)" slot="end" *ngIf="mobile">
-    <ion-icon name="more" aria-label="Options"></ion-icon>
+    <ion-icon ios="ellipsis-horizontal" md="ellipsis-vertical" aria-label="Options"></ion-icon>
   </button>
 
   <button (click)="openGoogleMap($event)" slot="end" *ngIf="!mobile && flat.data.location">

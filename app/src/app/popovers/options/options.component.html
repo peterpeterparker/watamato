@@ -38,10 +38,12 @@
   </ion-item-divider>
 
   <ion-item (click)="openGoogleMap()" *ngIf="flat?.data?.location !== undefined">
-    <ion-label>Open in Google Map</ion-label>
+    <ion-icon slot="start" name="open" aria-label="Open in Google Map"></ion-icon>
+    <ion-label>Google Map</ion-label>
   </ion-item>
 
   <ion-item (click)="delete()">
+    <ion-icon slot="start" name="trash" aria-label="Remove"></ion-icon>
     <ion-label>Delete</ion-label>
   </ion-item>
 </ion-list>
