@@ -7,11 +7,11 @@ import {User} from 'firebase';
 import {AuthService} from '../../services/auth/auth.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  selector: 'app-board',
+  templateUrl: 'board.page.html',
+  styleUrls: ['board.page.scss']
 })
-export class HomePage implements OnInit {
+export class BoardPage implements OnInit {
   user$: Observable<User>;
 
   constructor(private authService: AuthService) {}

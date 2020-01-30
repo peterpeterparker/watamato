@@ -4,7 +4,7 @@ import {IonicModule} from '@ionic/angular';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 
-import {HomePage} from './home.page';
+import {BoardPage} from './board.page';
 
 import {FeedModule} from '../../components/feed/feed.module';
 import {TitleModule} from '../../components/title/title.module';
@@ -17,12 +17,12 @@ import {TitleModule} from '../../components/title/title.module';
     RouterModule.forChild([
       {
         path: '',
-        component: HomePage
+        component: BoardPage
       }
     ]),
     FeedModule,
     TitleModule
   ],
-  declarations: [HomePage]
+  declarations: [BoardPage]
 })
-export class HomePageModule {}
+export class BoardPageModule {}
