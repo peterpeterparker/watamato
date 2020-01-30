@@ -11,5 +11,5 @@ export const environment = {
     measurementId: 'G-XY72KL25LS'
   },
   name: 'watamato',
-  version: '0.0.1'
+  version: '0.2.0'
 };

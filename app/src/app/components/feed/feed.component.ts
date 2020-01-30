@@ -8,6 +8,8 @@ import {filter, take, takeUntil} from 'rxjs/operators';
 
 import {isFirefox} from '@deckdeckgo/utils';
 
+import {isWindows} from '../../utils/browser.utils';
+
 import {OptionsComponent} from '../../popovers/options/options.component';
 
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
@@ -277,7 +279,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   isMobile(): boolean {
-    return this.platform.is('mobile');
+    return this.platform.is('mobile') && !isWindows();
   }
 
   async presentOptionsPopover($event: {$event: UIEvent; elementRef: HTMLElement}, flat: UserFlat) {
