@@ -98,7 +98,7 @@ export class FeedComponent implements OnInit, OnDestroy {
 
   private initDragula(): Promise<void> {
     return new Promise<void>((resolve) => {
-      if (this.isTouchDevice()) {
+      if (this.isMobile()) {
         this.dragulaService.createGroup('bag', {
           moves: (el, target, source, sibling) => {
             return false;
@@ -276,8 +276,8 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.msgService.msg('Removed.');
   }
 
-  isTouchDevice(): boolean {
-    return this.platform.is('mobile') && !this.platform.is('desktop');
+  isMobile(): boolean {
+    return this.platform.is('mobile');
   }
 
   async presentOptionsPopover($event: {$event: UIEvent; elementRef: HTMLElement}, flat: UserFlat) {

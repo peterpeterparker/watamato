@@ -7,7 +7,7 @@
         <div dragula="bag" [attr.status]="'new'">
           <ng-container *ngFor="let flat of flatsNew$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -23,7 +23,7 @@
         <div dragula="bag" [attr.status]="'bookmarked'">
           <ng-container *ngFor="let flat of flatsBookmarked$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -39,7 +39,7 @@
         <div dragula="bag" [attr.status]="'viewing'">
           <ng-container *ngFor="let flat of flatsViewing$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -55,7 +55,7 @@
         <div dragula="bag" [attr.status]="'applied'">
           <ng-container *ngFor="let flat of flatsApplied$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -71,7 +71,7 @@
         <div dragula="bag" [attr.status]="'rejected'">
           <ng-container *ngFor="let flat of flatsRejected$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -87,7 +87,7 @@
         <div dragula="bag" [attr.status]="'winning'">
           <ng-container *ngFor="let flat of flatsWinning$ | async; let last = last">
             <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
-              <app-flat [flat]="flat" [mobile]="isTouchDevice()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
             </ion-card>
 
             <div *ngIf="last" class="placeholder-for-pagination"></div>
@@ -97,7 +97,7 @@
     </section>
   </main>
 
-  <section class="delete ion-margin" dragula="bag" [attr.status]="'disliked'" [class.mobile]="isTouchDevice()">
+  <section class="delete ion-margin" dragula="bag" [attr.status]="'disliked'" [class.mobile]="isMobile()">
     <div>
       <ion-icon name="trash" [lazy]="true" aria-label="Delete"></ion-icon>
     </div>
