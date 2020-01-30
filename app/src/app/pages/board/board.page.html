@@ -1,10 +1,16 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title><app-title></app-title></ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/about']" aria-label="About">
+        <ion-icon name="information-circle-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <ng-container *ngIf="(user$ | async) as user; else userLoading;">
     <app-feed></app-feed>
   </ng-container>

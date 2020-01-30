@@ -45,8 +45,8 @@ section.delete {
   bottom: 0;
   right: 0;
 
-  width: 64px;
-  height: 64px;
+  width: 96px;
+  height: 96px;
 
   display: flex;
   justify-content: flex-end;
@@ -83,4 +83,8 @@ ion-infinite-scroll {
   ion-infinite-scroll-content {
     --color: var(--ion-color-light);
   }
+}
+
+app-footer {
+  margin-top: 48px;
 }
