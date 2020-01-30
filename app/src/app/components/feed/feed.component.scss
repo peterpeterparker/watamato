@@ -3,7 +3,7 @@
 main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  grid-gap: .5rem;
+  grid-gap: 0.5rem;
   align-items: flex-start;
   /* Uncomment these lines if you want to have the standard Trello behavior instead of the column wrapping */
   grid-auto-flow: column;
@@ -12,7 +12,7 @@ main {
   section {
     display: grid;
     grid-template-rows: auto;
-    grid-gap: .5rem;
+    grid-gap: 0.5rem;
 
     height: 100%;
     min-height: 80vh;
@@ -20,7 +20,7 @@ main {
     background: var(--ion-color-light);
     border-radius: 3px;
 
-    >  div{
+    > div {
       display: flex;
       flex-direction: column;
 
@@ -31,6 +31,10 @@ main {
 
       div[status] {
         min-height: 100%;
+      }
+
+      div.placeholder-for-pagination {
+        display: none;
       }
     }
   }
@@ -55,7 +59,7 @@ section.delete {
   > div {
     background: var(--ion-color-danger);
     border-radius: 50%;
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 
     height: 48px;
     width: 48px;
