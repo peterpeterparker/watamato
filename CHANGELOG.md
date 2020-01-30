@@ -4,6 +4,7 @@
 
 ### Features
 
+- if windows platform is detected, force the use of drag'n'drop
 - remove unused ionic native
 
 <a name="0.2.0"></a>
