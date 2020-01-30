@@ -110,7 +110,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
         rooms: rooms,
         price: price,
         published_at: new Date(),
-        source: "homegate"
+        source: "flatfox"
       } as FlatData;
     });
 
