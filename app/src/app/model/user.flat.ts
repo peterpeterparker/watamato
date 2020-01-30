@@ -2,6 +2,7 @@ import {DocumentReference} from '@angular/fire/firestore';
 
 export enum UserFlatStatus {
   NEW = 'new',
+  BOOKMARKED = 'bookmarked',
   DISLIKED = 'disliked',
   VIEWING = 'viewing',
   APPLIED = 'applied',
@@ -10,7 +11,8 @@ export enum UserFlatStatus {
 }
 
 export enum UserFlatSource {
-  RONORP = 'ronorp'
+  RONORP = 'ronorp',
+  HOMEGATE = 'homegate'
 }
 
 export interface UserFlatData {

@@ -1,5 +1,12 @@
-import {FlatData} from './flat';
+import { FlatData } from "./flat";
 
 interface UserFlatData extends FlatData {
-    status: 'new' | 'disliked' | 'viewing' | 'applied' | 'rejected' | 'winning';
+  status:
+    | "new"
+    | "bookmarked"
+    | "disliked"
+    | "viewing"
+    | "applied"
+    | "rejected"
+    | "winning";
 }

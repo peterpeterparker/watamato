@@ -18,6 +18,7 @@ import {FlatsWinningService} from './services/flats/flats.winning.service';
 
 import {MsgService} from './services/msg/msg.service';
 import {UserFlatStatus} from './model/user.flat';
+import {FlatsBookmarkedService} from './services/flats/flats.bookmarked.service';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private statusBar: StatusBar,
     private authService: AuthService,
     private flatsNewService: FlatsNewService,
+    private flatsBookmarkedService: FlatsBookmarkedService,
     private flatsAppliedService: FlatsAppliedService,
     private flatsViewingService: FlatsViewingService,
     private flatsRejectedService: FlatsRejectedService,
@@ -57,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const promises: Promise<void>[] = [
       this.flatsNewService.init(),
+      this.flatsBookmarkedService.init(),
       this.flatsAppliedService.init(),
       this.flatsViewingService.init(),
       this.flatsRejectedService.init(),

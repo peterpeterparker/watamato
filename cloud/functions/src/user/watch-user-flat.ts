@@ -69,6 +69,12 @@ function updateNewPosition(newValue: UserFlatData, user: User, flatId: string) {
     } else {
       user.data.applied_ids.splice(newValue.position, 0, flatId);
     }
+  } else if (newValue.status === "bookmarked") {
+    if (!user.data.bookmarked_ids || user.data.bookmarked_ids === undefined) {
+      user.data.bookmarked_ids = [flatId];
+    } else {
+      user.data.bookmarked_ids.splice(newValue.position, 0, flatId);
+    }
   } else if (newValue.status === "viewing") {
     if (!user.data.viewing_ids || user.data.viewing_ids === undefined) {
       user.data.viewing_ids = [flatId];
@@ -106,6 +112,16 @@ function updateOldPosition(oldValue: UserFlatData, user: User, flatId: string) {
   } else if (oldValue.status === "applied") {
     if (user.data.applied_ids && user.data.applied_ids.indexOf(flatId) > -1) {
       user.data.applied_ids.splice(user.data.applied_ids.indexOf(flatId), 1);
+    }
+  } else if (oldValue.status === "bookmarked") {
+    if (
+      user.data.bookmarked_ids &&
+      user.data.bookmarked_ids.indexOf(flatId) > -1
+    ) {
+      user.data.bookmarked_ids.splice(
+        user.data.bookmarked_ids.indexOf(flatId),
+        1
+      );
     }
   } else if (oldValue.status === "viewing") {
     if (user.data.viewing_ids && user.data.viewing_ids.indexOf(flatId) > -1) {

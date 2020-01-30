@@ -9,6 +9,10 @@
     <ion-label>New</ion-label>
   </ion-item>
 
+  <ion-item *ngIf="status !== 'bookmarked'" (click)="move('bookmarked')">
+    <ion-label>Bookmark</ion-label>
+  </ion-item>
+
   <ion-item *ngIf="status !== 'viewing'" (click)="move('viewing')">
     <ion-label>Viewing</ion-label>
   </ion-item>

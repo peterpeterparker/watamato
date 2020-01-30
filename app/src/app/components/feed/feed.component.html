@@ -18,6 +18,22 @@
 
     <section>
       <div>
+        <ion-label class="column-title">Bookmarks</ion-label>
+
+        <div dragula="bag" [attr.status]="'bookmarked'">
+          <ng-container *ngFor="let flat of flatsBookmarked$ | async; let last = last">
+            <ion-card mode="md" (click)="open(flat)" [attr.key]="flat.id">
+              <app-flat [flat]="flat" [mobile]="isMobile()" (options)="presentOptionsPopover($event, flat)"></app-flat>
+            </ion-card>
+
+            <div *ngIf="last" class="placeholder-for-pagination"></div>
+          </ng-container>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div>
         <ion-label class="column-title">Viewings</ion-label>
 
         <div dragula="bag" [attr.status]="'viewing'">

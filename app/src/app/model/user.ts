@@ -3,6 +3,7 @@ import {DocumentReference} from '@angular/fire/firestore';
 export interface UserData {
   new_ids?: string[];
   disliked_ids?: string[];
+  bookmarked_ids?: string[];
   applied_ids?: string[];
   viewing_ids?: string[];
   rejected_ids?: string[];
