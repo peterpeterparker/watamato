@@ -9,7 +9,7 @@ interface FlatData {
   price: number;
   published_at: Date;
 
-  source: "ronorp" | "homegate";
+  source: "ronorp" | "homegate" | "flatfox";
   position?: number;
 
   created_at?: firestore.Timestamp;
