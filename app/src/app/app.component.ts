@@ -1,11 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
-import {Platform, ToastController} from '@ionic/angular';
+import {ToastController} from '@ionic/angular';
 
 import {Subscription} from 'rxjs';
-
-import {SplashScreen} from '@ionic-native/splash-screen/ngx';
-import {StatusBar} from '@ionic-native/status-bar/ngx';
 
 import {AuthService} from './services/auth/auth.service';
 import {UserService} from './services/user/user.service';
@@ -17,7 +14,7 @@ import {FlatsRejectedService} from './services/flats/flats.rejected.service';
 import {FlatsWinningService} from './services/flats/flats.winning.service';
 
 import {MsgService} from './services/msg/msg.service';
-import {UserFlatStatus} from './model/user.flat';
+
 import {FlatsBookmarkedService} from './services/flats/flats.bookmarked.service';
 
 @Component({
@@ -30,10 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private errorSubscription: Subscription;
 
   constructor(
-    private platform: Platform,
     private toastController: ToastController,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar,
     private authService: AuthService,
     private flatsNewService: FlatsNewService,
     private flatsBookmarkedService: FlatsBookmarkedService,
@@ -43,16 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private flatsWinningService: FlatsWinningService,
     private userService: UserService,
     private msgService: MsgService
-  ) {
-    this.initializeApp();
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
-  }
+  ) {}
 
   async ngOnInit() {
     await this.authService.anonymousLogin();
