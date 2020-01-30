@@ -5,6 +5,7 @@ import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
 import {UserFlatsService} from '../../services/user/user.flats.service';
 import {MsgService} from '../../services/msg/msg.service';
+import {openMap} from '../../utils/map.utils';
 
 @Component({
   selector: 'app-options',
@@ -45,6 +46,10 @@ export class OptionsComponent implements OnInit {
     } catch (err) {
       this.msgService.error('Oopsie something went wrong.');
     }
+  }
+
+  openGoogleMap() {
+    openMap(this.flat.data.location);
   }
 
   async delete() {
