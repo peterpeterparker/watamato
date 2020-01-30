@@ -2,6 +2,10 @@
 
 # 0.2.0 (2020-01-30)
 
+### Fix
+
+- typo in the URL og: meta tags
+
 ### Features
 
 - if windows platform is detected, force the use of drag'n'drop
