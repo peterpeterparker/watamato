@@ -14,7 +14,7 @@ import {environment} from '../environments/environment';
 
 import {AngularFireAuthModule} from '@angular/fire/auth';
 import {AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireAnalyticsModule, CONFIG} from '@angular/fire/analytics';
+import {AngularFireAnalyticsModule, APP_NAME, APP_VERSION, CONFIG} from '@angular/fire/analytics';
 
 import {DragulaModule} from 'ng2-dragula';
 
@@ -41,7 +41,9 @@ import {DragulaModule} from 'ng2-dragula';
         allow_ad_personalization_signals: false,
         anonymize_ip: true
       }
-    }
+    },
+    {provide: APP_NAME, useValue: environment.name},
+    {provide: APP_VERSION, useValue: environment.version}
   ],
   bootstrap: [AppComponent]
 })
