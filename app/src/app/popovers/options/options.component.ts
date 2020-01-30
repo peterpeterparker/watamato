@@ -13,10 +13,10 @@ import {openMap} from '../../utils/map.utils';
   styleUrls: ['./options.component.scss']
 })
 export class OptionsComponent implements OnInit {
-  private flat: UserFlat;
   private cardRef: HTMLElement;
 
   status: UserFlatStatus;
+  flat: UserFlat;
 
   constructor(
     private navParams: NavParams,

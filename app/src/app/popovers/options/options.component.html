@@ -37,7 +37,7 @@
     </ion-label>
   </ion-item-divider>
 
-  <ion-item (click)="openGoogleMap()" *ngIf="flat.data.location !== undefined">
+  <ion-item (click)="openGoogleMap()" *ngIf="flat?.data?.location !== undefined">
     <ion-label>Open in Google Map</ion-label>
   </ion-item>
 
