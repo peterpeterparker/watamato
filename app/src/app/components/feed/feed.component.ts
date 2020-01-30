@@ -27,7 +27,7 @@ import {MsgService} from '../../services/msg/msg.service';
   styleUrls: ['./feed.component.scss']
 })
 export class FeedComponent implements OnInit, OnDestroy {
-  @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   flatsNew$: Observable<UserFlat[]>;
   flatsBookmarked$: Observable<UserFlat[]>;
