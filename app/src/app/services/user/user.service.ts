@@ -9,6 +9,7 @@ import {User as FirebaseUser} from 'firebase';
 import {User, UserData} from '../../model/user';
 
 import {AuthService} from '../auth/auth.service';
+import {MsgService} from '../msg/msg.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ import {AuthService} from '../auth/auth.service';
 export class UserService {
   private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject(undefined);
 
-  constructor(private fireStore: AngularFirestore, private authService: AuthService) {}
+  constructor(private fireStore: AngularFirestore, private authService: AuthService, private msgService: MsgService) {}
 
   init() {
     this.authService
@@ -29,7 +30,7 @@ export class UserService {
         try {
           await this.load(user);
         } catch (err) {
-          console.error(err);
+          this.msgService.error('Could not load anonymouse user.');
         }
       });
   }
