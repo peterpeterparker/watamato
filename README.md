@@ -22,17 +22,17 @@
 
 ## Getting Started
 
-Once again I find myself having to find a new place to live in Zürich City and therefore once again I have to use search engines and platforms to browse flats, that, at least to my eyes, were never upgraded, in terms of UX and even sometimes design, since the ’90s 🙈.
+Once again I have to find a new place to live in Zürich City and therefore once again I have to use search engines and platforms to browse flats, that were, at least to my eyes, never upgraded in terms of UX and even sometimes design, since the ’90s 🙈.
 
 Sunday morning, while I was about to visit such websites, I realize that there are no ways to me to undergo the frustration of using these for weeks or months, again 😤.
 
 That's why I've created in a couple of days this prototype to help me solve my problem.
 
-Btw. I'm still looking for a new apartment in town, if you have any tips or looking for someone to takeover your rent, ping me 🙏.
+Btw. I'm still looking for a new apartment in town. If you have any tips or looking for someone to takeover your rent, ping me 🙏.
 
 ## Features
 
-A Trello look alike board updated with new flat ads coming from the housing online market.
+A Trello look alike board automatically updated with incoming flat opportunities from the housing online market.
 
 Currently there are no filter available. It's a personal projects and therefore they are applied at the source with my matching expectations.
 
