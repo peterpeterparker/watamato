@@ -12,7 +12,8 @@ export enum UserFlatStatus {
 
 export enum UserFlatSource {
   RONORP = 'ronorp',
-  HOMEGATE = 'homegate'
+  HOMEGATE = 'homegate',
+  FLATFOX = 'flatfox'
 }
 
 export interface UserFlatData {
