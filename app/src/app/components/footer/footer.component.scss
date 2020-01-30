@@ -1,0 +1,64 @@
+:host {
+  background: var(--ion-color-light);
+}
+
+> img {
+  display: block;
+  padding-top: 48px;
+}
+
+main {
+  background: var(--ion-color-light);
+
+  section {
+    max-width: 720px;
+    margin: auto;
+
+    display: grid;
+    grid-gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-rows: auto;
+    justify-items: center;
+
+    grid-column-gap: 32px;
+
+    article {
+      max-width: 320px;
+
+      div.deckdeckgo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 32px;
+        }
+      }
+    }
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+      line-height: 1.2rem;
+
+      a {
+        text-decoration: none;
+        color: black;
+        position: relative;
+
+        &:after {
+          position: absolute;
+          content: "";
+          width: 100%;
+          top: 100%;
+          left: 0;
+          height: 0.0625rem;
+          background-color: currentcolor;
+        }
+      }
+    }
+  }
+}

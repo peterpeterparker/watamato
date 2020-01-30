@@ -26,7 +26,7 @@ Once again I find myself having to find a new place to live in Zürich City and 
 
 Sunday morning, while I was about to visit such websites, I realize that there are no ways to me to undergo the frustration of using these for weeks or months, again 😤.
 
-That's why I've created in a couple of days this prototype to help solve my problem.
+That's why I've created in a couple of days this prototype to help me solve my problem.
 
 Btw. I'm still looking for a new apartment in town, if you have any tips or looking for someone to takeover your rent, ping me 🙏.
 

@@ -37,6 +37,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   flatsWinning$: Observable<UserFlat[]>;
 
   loaded = false;
+  everythingFetched = false;
 
   private statusLoaded: UserFlatStatus[] = [];
   private statusLastPageReached: UserFlatStatus[] = [];
@@ -204,6 +205,7 @@ export class FeedComponent implements OnInit, OnDestroy {
           if (this.statusLastPageReached.length >= this.statusLength && this.infiniteScroll) {
             this.loaded = true;
             this.infiniteScroll.disabled = true;
+            this.everythingFetched = true;
           }
         }
       });

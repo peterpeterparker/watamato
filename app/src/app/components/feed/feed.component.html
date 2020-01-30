@@ -1,5 +1,5 @@
 <ng-container *ngIf="loaded; else feedLoading">
-  <main>
+  <main class="ion-padding">
     <section>
       <div>
         <ion-label class="column-title">New</ion-label>
@@ -106,6 +106,10 @@
   <ion-infinite-scroll (ionInfinite)="findNext($event)">
     <ion-infinite-scroll-content> </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+
+  <ng-container *ngIf="everythingFetched">
+    <app-footer></app-footer>
+  </ng-container>
 </ng-container>
 
 <ng-template #feedLoading>

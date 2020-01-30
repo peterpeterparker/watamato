@@ -10,7 +10,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <ng-container *ngIf="(user$ | async) as user; else userLoading;">
     <app-feed></app-feed>
   </ng-container>
