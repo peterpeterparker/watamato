@@ -1,4 +1,6 @@
 button {
+  position: relative;
+
   border: none;
   margin: 0;
   padding: 8px 4px;
@@ -17,4 +19,8 @@ button {
   position: absolute;
   top: 0;
   right: 0;
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
 }

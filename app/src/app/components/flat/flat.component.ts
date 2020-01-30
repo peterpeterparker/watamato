@@ -3,6 +3,7 @@ import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core'
 import {toDateObj} from '../../utils/date.utils';
 
 import {UserFlat} from '../../model/user.flat';
+import {openMap} from '../../utils/map.utils';
 
 @Component({
   selector: 'app-flat',
@@ -32,5 +33,11 @@ export class FlatComponent {
       $event,
       elementRef: this.hostElement.nativeElement
     });
+  }
+
+  openGoogleMap($event: UIEvent) {
+    $event.stopPropagation();
+
+    openMap(this.flat.data.location);
   }
 }

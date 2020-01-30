@@ -6,6 +6,10 @@
   <button (click)="openOptions($event)" slot="end" *ngIf="mobile">
     <ion-icon name="more" aria-label="Options"></ion-icon>
   </button>
+
+  <button (click)="openGoogleMap($event)" slot="end" *ngIf="!mobile && flat.data.location">
+    <ion-icon name="map" aria-label="Open in Google Map"></ion-icon>
+  </button>
 </section>
 
 <ion-card-header>
