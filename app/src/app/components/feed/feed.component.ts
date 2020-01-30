@@ -6,6 +6,8 @@ import {DragulaService} from 'ng2-dragula';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
 
+import {isFirefox} from '@deckdeckgo/utils';
+
 import {OptionsComponent} from '../../popovers/options/options.component';
 
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
@@ -49,9 +51,8 @@ export class FeedComponent implements OnInit, OnDestroy {
   // -1 as we don't display 'dislike' status
   private statusLength = Object.keys(UserFlatStatus).length - 1;
 
-  // If a card is moved and then put back to its origin, then a click will be triggered.
-  // As card links to external URl, we want to catch this to not open a link when it was not what the user was looking to do.
-  private cardBackToOrigin = false;
+  // In Firefox, dropping a card propagate the click event
+  private firefoxDrag = false;
 
   constructor(
     private dragulaService: DragulaService,
@@ -109,23 +110,16 @@ export class FeedComponent implements OnInit, OnDestroy {
       }
 
       this.dragulaSubscription.add(
-        this.dragulaService.drag('bag').subscribe(({el}) => {
-          this.cardBackToOrigin = false;
-        })
-      );
-
-      this.dragulaSubscription.add(
         this.dragulaService.cloned('bag').subscribe(({clone, original, cloneType}) => {
           setTimeout(() => {
             (clone as HTMLElement).style.transform = 'rotate(5deg)';
           }, 10);
-          this.cardBackToOrigin = false;
         })
       );
 
       this.dragulaSubscription.add(
-        this.dragulaService.cancel('bag').subscribe(({el}) => {
-          this.cardBackToOrigin = true;
+        this.dragulaService.cancel('bag').subscribe(async ({el}) => {
+          await this.stopFirefoxAutoOpening();
         })
       );
 
@@ -144,6 +138,8 @@ export class FeedComponent implements OnInit, OnDestroy {
       this.dragulaSubscription.add(
         this.dragulaService.drop('bag').subscribe(async ({el, target, source, sibling}) => {
           try {
+            await this.stopFirefoxAutoOpening();
+
             // Index of the card in its new column
             const index = [...Array.from(el.parentElement.children)].indexOf(el);
 
@@ -157,6 +153,24 @@ export class FeedComponent implements OnInit, OnDestroy {
           }
         })
       );
+
+      resolve();
+    });
+  }
+
+  // No comment
+  private stopFirefoxAutoOpening(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.firefoxDrag = isFirefox();
+
+      if (!this.firefoxDrag) {
+        resolve();
+        return;
+      }
+
+      setTimeout(() => {
+        this.firefoxDrag = false;
+      }, 500);
 
       resolve();
     });
@@ -241,8 +255,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   }
 
   open(flat: UserFlat) {
-    if (this.cardBackToOrigin) {
-      this.cardBackToOrigin = !this.cardBackToOrigin;
+    if (this.firefoxDrag) {
       return;
     }
 
