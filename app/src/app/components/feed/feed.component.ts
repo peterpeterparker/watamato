@@ -1,10 +1,12 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {IonInfiniteScroll, Platform, PopoverController, ToastController} from '@ionic/angular';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {IonInfiniteScroll, Platform, PopoverController} from '@ionic/angular';
 
 import {DragulaService} from 'ng2-dragula';
 
 import {Observable, Subject, Subscription} from 'rxjs';
 import {filter, take, takeUntil} from 'rxjs/operators';
+
+import {OptionsComponent} from '../../popovers/options/options.component';
 
 import {UserFlat, UserFlatStatus} from '../../model/user.flat';
 
@@ -16,7 +18,7 @@ import {FlatsAppliedService} from '../../services/flats/flats.applied.service';
 import {FlatsRejectedService} from '../../services/flats/flats.rejected.service';
 import {FlatsViewingService} from '../../services/flats/flats.viewing.service';
 import {FlatsWinningService} from '../../services/flats/flats.winning.service';
-import {OptionsComponent} from '../../popovers/options/options.component';
+import {FlatsBookmarkedService} from '../../services/flats/flats.bookmarked.service';
 import {MsgService} from '../../services/msg/msg.service';
 
 @Component({
@@ -28,6 +30,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll, {static: false}) infiniteScroll: IonInfiniteScroll;
 
   flatsNew$: Observable<UserFlat[]>;
+  flatsBookmarked$: Observable<UserFlat[]>;
   flatsViewing$: Observable<UserFlat[]>;
   flatsApplied$: Observable<UserFlat[]>;
   flatsRejected$: Observable<UserFlat[]>;
@@ -55,6 +58,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     private popoverController: PopoverController,
     private userFlatsService: UserFlatsService,
     private flatsNewService: FlatsNewService,
+    private flatsBookmarkedService: FlatsBookmarkedService,
     private flatsAppliedService: FlatsAppliedService,
     private flatsViewingService: FlatsViewingService,
     private flatsRejectedService: FlatsRejectedService,
@@ -66,6 +70,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     await this.initDragula();
 
     this.flatsNew$ = this.flatsNewService.watchFlats();
+    this.flatsBookmarked$ = this.flatsBookmarkedService.watchFlats();
     this.flatsViewing$ = this.flatsViewingService.watchFlats();
     this.flatsApplied$ = this.flatsAppliedService.watchFlats();
     this.flatsRejected$ = this.flatsRejectedService.watchFlats();
@@ -73,11 +78,13 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     const promises: Promise<void>[] = [
       this.watchLoad(this.flatsNewService),
+      this.watchLoad(this.flatsBookmarkedService),
       this.watchLoad(this.flatsAppliedService),
       this.watchLoad(this.flatsViewingService),
       this.watchLoad(this.flatsRejectedService),
       this.watchLoad(this.flatsWinningService),
       this.watchLastPageReached(this.flatsNewService),
+      this.watchLastPageReached(this.flatsBookmarkedService),
       this.watchLastPageReached(this.flatsAppliedService),
       this.watchLastPageReached(this.flatsViewingService),
       this.watchLastPageReached(this.flatsRejectedService),
@@ -221,6 +228,7 @@ export class FeedComponent implements OnInit, OnDestroy {
   private async findAll() {
     const promises: Promise<void>[] = [
       this.flatsNewService.find(),
+      this.flatsBookmarkedService.find(),
       this.flatsAppliedService.find(),
       this.flatsViewingService.find(),
       this.flatsRejectedService.find(),
