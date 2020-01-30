@@ -6,7 +6,7 @@ import { FlatData } from "../model/flat";
 
 import { JSDOM } from "jsdom";
 
-export async function crawlHomegate(): Promise<FlatData[] | undefined> {
+export async function crawlFlatfox(): Promise<FlatData[] | undefined> {
   const browser: Browser = await launch({ args: ["--no-sandbox"] });
 
   const page: Page = await browser.newPage();
@@ -137,7 +137,7 @@ function filterPlz(dom: JSDOM): boolean {
 
 // (async () => {
 //     try {
-//         await crawlHomegate();
+//         await crawlFlatfox();
 //     } catch (e) {
 //         // Deal with the fact the chain failed
 //     }

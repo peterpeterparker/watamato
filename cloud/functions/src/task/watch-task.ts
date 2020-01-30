@@ -5,6 +5,7 @@ import { FlatData } from "../model/flat";
 
 import { crawlRonorp } from "../crawler/ronorp";
 import { crawlHomegate } from "../crawler/homegate";
+import { crawlFlatfox } from "../crawler/flatfox";
 
 import { save } from "../utils/flats.utils";
 import { successful } from "../utils/tasks.utils";
@@ -30,6 +31,11 @@ export async function watchTaskCreate(
     const homegateElements: FlatData[] | undefined = await crawlHomegate();
     if (homegateElements !== undefined) {
       elements = [...elements, ...homegateElements];
+    }
+
+    const flatfoxElements: FlatData[] | undefined = await crawlFlatfox();
+    if (flatfoxElements !== undefined) {
+      elements = [...elements, ...flatfoxElements];
     }
 
     await save(elements);
