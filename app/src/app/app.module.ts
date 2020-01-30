@@ -18,6 +18,8 @@ import {AngularFireAnalyticsModule, APP_NAME, APP_VERSION, CONFIG} from '@angula
 
 import {DragulaModule} from 'ng2-dragula';
 
+import {ServiceWorkerModule} from '@angular/service-worker';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -29,7 +31,8 @@ import {DragulaModule} from 'ng2-dragula';
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireAnalyticsModule,
-    DragulaModule.forRoot()
+    DragulaModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: environment.production})
   ],
   providers: [
     StatusBar,
