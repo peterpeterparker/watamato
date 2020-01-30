@@ -166,22 +166,17 @@ function filterDate(dom: JSDOM): boolean {
     return false;
   }
 
+  // Today
   if (dateChild.innerHTML.match(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/g)) {
     return true;
   }
 
-  if (
-    !dateChild.innerHTML.match(
-      /^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g
-    )
-  ) {
-    return false;
-  }
+  // An example of matcher for date
+  // dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
 
+  // Yesterday
   const yesterday: Date = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-
-  // dateChild.innerHTML.match(/^([0-2][0-9]|(3)[0-1])(\.)(((0)[0-9])|((1)[0-2]))(\.)\d{4}$/g)
 
   return yesterday.toLocaleDateString("de-CH") === dateChild.innerHTML;
 }
