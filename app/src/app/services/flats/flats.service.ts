@@ -64,6 +64,8 @@ export class FlatsService {
       return user.data.viewing_ids !== undefined ? [...user.data.viewing_ids] : undefined;
     } else if (status === UserFlatStatus.DISLIKED) {
       return user.data.disliked_ids !== undefined ? [...user.data.disliked_ids] : undefined;
+    } else if (status === UserFlatStatus.BOOKMARKED) {
+      return user.data.bookmarked_ids !== undefined ? [...user.data.bookmarked_ids] : undefined;
     } else {
       return user.data.new_ids !== undefined ? [...user.data.new_ids] : undefined;
     }
