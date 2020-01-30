@@ -14,7 +14,7 @@ import {UserService} from '../user/user.service';
   providedIn: 'root'
 })
 export class FlatsService {
-  private QUERY_LIMIT = 2;
+  private QUERY_LIMIT = 10;
 
   constructor(private fireStore: AngularFirestore, private userService: UserService) {}
 
