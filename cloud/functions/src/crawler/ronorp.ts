@@ -301,7 +301,7 @@ async function goLogin(page: Page) {
 async function goHomepage(page: Page) {
   await page.goto("https://www.ronorp.net/", {
     waitUntil: "domcontentloaded",
-    timeout: 10000
+    timeout: 30000
   });
 
   await (page as any)._client.send("ServiceWorker.enable");

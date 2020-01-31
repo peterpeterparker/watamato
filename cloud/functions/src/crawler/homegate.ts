@@ -36,7 +36,7 @@ async function goToWohnung(page: Page, index: number) {
 
   await page.goto(url, {
     waitUntil: "networkidle0",
-    timeout: 10000
+    timeout: 30000
   });
 
   await (page as any)._client.send("ServiceWorker.enable");
