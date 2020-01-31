@@ -72,6 +72,11 @@ export async function watchTaskCreate(
     );
   } catch (err) {
     console.error(err);
-    await failure(taskId);
+
+    try {
+      await failure(taskId);
+    } catch (errDb) {
+      console.error(errDb);
+    }
   }
 }
