@@ -1,15 +1,15 @@
-import {firestore} from 'firebase-admin';
+import { firestore } from "firebase-admin";
 
 interface TaskData {
-    status: 'scheduled' | 'failed' | 'successful';
+  status: "scheduled" | "failure" | "successful";
 
-    created_at?: firestore.Timestamp;
-    updated_at?: firestore.Timestamp;
+  created_at?: firestore.Timestamp;
+  updated_at?: firestore.Timestamp;
 }
 
 interface Task {
-    id: string;
-    ref: firestore.DocumentReference;
+  id: string;
+  ref: firestore.DocumentReference;
 
-    data: TaskData;
+  data: TaskData;
 }
