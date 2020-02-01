@@ -107,7 +107,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
       const url: string | null =
         link && link.hasAttribute("href")
-          ? `https://www.homegate.ch/${link.getAttribute("href")}`
+          ? `https://www.homegate.ch${link.getAttribute("href")}`
           : null;
 
       return {
