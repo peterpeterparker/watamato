@@ -15,8 +15,6 @@ export async function crawlFlatfox(): Promise<FlatData[] | undefined> {
   await goToWohnung(page);
   const elements: FlatData[] | undefined = await findElements(page);
 
-  console.log(elements);
-
   return elements;
 }
 
