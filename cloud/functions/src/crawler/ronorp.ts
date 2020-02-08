@@ -93,8 +93,15 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
       const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
 
       const link = dom.window.document.querySelector("a.image-wrapper");
+      const image = dom.window.document.querySelector("a.image-wrapper > img");
 
-      return link !== undefined && filterPlz(dom) && filterDate(dom);
+      return (
+        link !== undefined &&
+        filterPlz(dom) &&
+        filterDate(dom) &&
+        image &&
+        image.hasAttribute("data-src")
+      );
     })
     .map((element: string) => {
       const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
