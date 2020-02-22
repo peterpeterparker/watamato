@@ -12,7 +12,7 @@ import { watchUserFlatUpdate } from "./user/watch-user-flat";
 
 const runtimeOpts = {
   timeoutSeconds: 240,
-  memory: <const>"1GB"
+  memory: <const>"2GB"
 };
 
 export const crawl = functions.https.onRequest(crawlImmo);
