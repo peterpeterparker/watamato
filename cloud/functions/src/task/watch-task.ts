@@ -21,55 +21,11 @@ export async function watchTaskCreate(
   }
 
   try {
-    let elements: FlatData[] = [];
-
-    const errors = {
-      ronorp: false,
-      homegate: false,
-      flatfox: false
-    };
-
-    try {
-      const ronorpElements: FlatData[] | undefined = await crawlRonorp();
-      if (ronorpElements !== undefined) {
-        elements = [...ronorpElements];
-      }
-    } catch (err) {
-      console.error("Ronorp err", err);
-      errors.ronorp = true;
-    }
-
-    try {
-      const homegateElements: FlatData[] | undefined = await crawlHomegate();
-      if (homegateElements !== undefined) {
-        elements = [...elements, ...homegateElements];
-      }
-    } catch (err) {
-      console.error("Homegate err", err);
-      errors.homegate = true;
-    }
-
-    try {
-      const flatfoxElements: FlatData[] | undefined = await crawlFlatfox();
-      if (flatfoxElements !== undefined) {
-        elements = [...elements, ...flatfoxElements];
-      }
-    } catch (err) {
-      console.error("Flatfox err", err);
-      errors.flatfox = true;
-    }
-
-    if (errors.ronorp && errors.homegate && errors.flatfox) {
-      throw new Error("All in errors");
-    }
-
-    await save(elements);
-
     await successful(taskId);
 
-    console.log(
-      `Crawl done. ${elements ? elements.length : 0} elements found.`
-    );
+    await crawlWithoutLogin();
+
+    await crawlWithLogin();
   } catch (err) {
     console.error(err);
 
@@ -79,4 +35,56 @@ export async function watchTaskCreate(
       console.error(errDb);
     }
   }
+}
+
+async function crawlWithoutLogin() {
+  let elements: FlatData[] = [];
+
+  try {
+    const homegateElements: FlatData[] | undefined = await crawlHomegate();
+
+    if (homegateElements !== undefined) {
+      elements = [...homegateElements];
+    }
+  } catch (err) {
+    console.error("Homegate err", err);
+  }
+
+  try {
+    const flatfoxElements: FlatData[] | undefined = await crawlFlatfox();
+
+    if (flatfoxElements !== undefined) {
+      elements = [...elements, ...flatfoxElements];
+    }
+  } catch (err) {
+    console.error("Flatfox err", err);
+  }
+
+  await save(elements);
+
+  console.log(
+    `Crawl without login done. ${
+      elements ? elements.length : 0
+    } elements found.`
+  );
+}
+
+async function crawlWithLogin() {
+  let elements: FlatData[] = [];
+
+  try {
+    const ronorpElements: FlatData[] | undefined = await crawlRonorp();
+
+    if (ronorpElements !== undefined) {
+      elements = [...ronorpElements];
+    }
+  } catch (err) {
+    console.error("Ronorp err", err);
+  }
+
+  await save(elements);
+
+  console.log(
+    `Crawl with login done. ${elements ? elements.length : 0} elements found.`
+  );
 }
