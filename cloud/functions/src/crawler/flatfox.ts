@@ -19,7 +19,7 @@ export async function crawlFlatfox(): Promise<FlatData[] | undefined> {
 }
 
 async function goToWohnung(page: Page) {
-  let url: string = `https://flatfox.ch/de/search/?east=8.577691901762364&is_furnished=false&is_temporary=false&max_price=2000&min_floor=1&min_price=1500&north=47.41205703605036&object_category=APARTMENT&ordering=-insertion&query=Zurich&south=47.341263892423434&west=8.497327555258153`;
+  let url: string = `https://flatfox.ch/de/search/?east=8.577691901762364&is_furnished=false&is_temporary=false&max_price=2300&min_floor=1&min_price=1500&north=47.41205703605036&object_category=APARTMENT&ordering=-insertion&query=Zurich&south=47.341263892423434&west=8.497327555258153`;
 
   await page.goto(url, {
     waitUntil: "networkidle0",
