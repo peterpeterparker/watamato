@@ -133,7 +133,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 // Even if the user filter the query, still not related PLZ are delivered
 function filterPlz(dom: JSDOM): boolean {
   const location = dom.window.document.querySelector(
-    'span[class*="AddressData_address"]'
+    'div[class*="ResultlistItem_data"] > p:last-of-type'
   );
 
   if (!location || !location.textContent) {
