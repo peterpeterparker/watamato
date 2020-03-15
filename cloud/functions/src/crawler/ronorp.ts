@@ -261,7 +261,7 @@ async function filterSearch(page: Page) {
 
   await page.evaluate(
     selector => document.querySelector(selector).click(),
-    'input[name="fdata[sp_realty_price_to]"][attr_label="2300"]'
+    'input[name="fdata[sp_realty_price_to]"][attr_label="2400"]'
   );
 
   await page.evaluate(
