@@ -136,7 +136,8 @@ function filterPlz(dom: JSDOM): boolean {
 
 // (async () => {
 //     try {
-//         await crawlFlatfox();
+//         const results = await crawlFlatfox();
+//         console.log(results);
 //     } catch (e) {
 //         // Deal with the fact the chain failed
 //     }

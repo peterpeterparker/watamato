@@ -323,7 +323,8 @@ async function goHomepage(page: Page) {
 
 // (async () => {
 //     try {
-//         await crawlRonorp();
+//         const results = await crawlRonorp();
+//         console.log(results);
 //     } catch (e) {
 //         // Deal with the fact the chain failed
 //     }

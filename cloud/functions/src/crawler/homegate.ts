@@ -45,6 +45,27 @@ async function goToWohnung(page: Page, index: number) {
   // await page.waitForFunction('document.querySelector("div#user-section-registration")');
 
   // await page.waitForNavigation();
+
+  await autoScroll(page);
+}
+
+async function autoScroll(page: Page) {
+  await page.evaluate(async () => {
+    await new Promise((resolve, reject) => {
+      let totalHeight = 0;
+      const distance = 100;
+      const timer = setInterval(() => {
+        let scrollHeight = document.body.scrollHeight;
+        window.scrollBy(0, distance);
+        totalHeight += distance;
+
+        if (totalHeight >= scrollHeight) {
+          clearInterval(timer);
+          resolve();
+        }
+      }, 100);
+    });
+  });
 }
 
 async function findElements(page: Page): Promise<FlatData[] | undefined> {
@@ -65,7 +86,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
       const dom = new JSDOM(`<!DOCTYPE html><div>${element}</div>`);
 
       const priceElement = dom.window.document.querySelector(
-        'span[class*="ListingPriceSimple_price"] span:not([class*="ListingPriceSimple_currency"])'
+        'span[class*="ListItemPrice_price"] span:not([class*="ListItemPrice_currency"])'
       );
 
       return priceElement !== undefined && filterPlz(dom);
@@ -75,23 +96,23 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
       const link = dom.window.document.querySelector("div > a");
       const image = dom.window.document.querySelector(
-        'div[class*="ResultlistItemImage"] > img'
+        'div[class*="ListItemImage_imageWrapper"] img'
       );
-      const title = dom.window.document.querySelector(
-        'div[class*="DescriptionSimple_description"] > p'
-      );
+
       const location = dom.window.document.querySelector(
-        'span[class*="AddressData_address"]'
+        "p:not([class]):last-of-type span:not([class])"
       );
       const rooms = dom.window.document.querySelector(
-        'span[class*="RoomNumber_value"]'
+        'span[class*="ListItemRoomNumber_value"]'
       );
       const priceElement = dom.window.document.querySelector(
-        'span[class*="ListingPriceSimple_price"] span:not([class*="ListingPriceSimple_currency"])'
+        'span[class*="ListItemPrice_price"] span:not([class*="ListItemPrice_currency"])'
       );
 
       if (rooms) {
-        const label = rooms.querySelector('span[class*="RoomNumber_label"]');
+        const label = rooms.querySelector(
+          'span[class*="ListItemRoomNumber_label"]'
+        );
 
         if (label && label.parentElement) {
           label.parentElement.removeChild(label);
@@ -114,9 +135,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
         url: url,
         image_url: image ? image.getAttribute("src") : null,
         title:
-          title && title.textContent
-            ? title.textContent.replace("\n", "").trim()
-            : null,
+          image && image.hasAttribute("alt") ? image.getAttribute("alt") : null,
         location:
           location && location.textContent ? location.textContent.trim() : null,
         rooms:
@@ -133,7 +152,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 // Even if the user filter the query, still not related PLZ are delivered
 function filterPlz(dom: JSDOM): boolean {
   const location = dom.window.document.querySelector(
-    'div[class*="ResultlistItem_data"] > p:last-of-type'
+    "p:not([class]):last-of-type span:not([class])"
   );
 
   if (!location || !location.textContent) {
@@ -156,9 +175,9 @@ function filterPlz(dom: JSDOM): boolean {
 // Uncomment to run the function locally
 
 // (async () => {
-//     try {
-//         await crawlHomegate();
-//     } catch (e) {
-//         // Deal with the fact the chain failed
-//     }
+//   try {
+//     await crawlHomegate();
+//   } catch (e) {
+//     // Deal with the fact the chain failed
+//   }
 // })();
