@@ -28,7 +28,7 @@ export async function crawlHomegate(): Promise<FlatData[] | undefined> {
 }
 
 async function goToWohnung(page: Page, index: number) {
-  let url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=1400&ah=2400`;
+  let url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=2000&ah=3000`;
 
   if (index > 1) {
     url += `&ep=${index}`;

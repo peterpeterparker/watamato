@@ -256,12 +256,12 @@ async function filterSearch(page: Page) {
   );
   await page.evaluate(
     selector => document.querySelector(selector).click(),
-    'input[name="fdata[sp_realty_price_from]"][attr_label="1400"]'
+    'input[name="fdata[sp_realty_price_from]"][attr_label="2000"]'
   );
 
   await page.evaluate(
     selector => document.querySelector(selector).click(),
-    'input[name="fdata[sp_realty_price_to]"][attr_label="2400"]'
+    'input[name="fdata[sp_realty_price_to]"][attr_label="3000"]'
   );
 
   await page.evaluate(
