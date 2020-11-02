@@ -134,8 +134,14 @@ export function findAll(): Promise<Flat[] | undefined> {
         .firestore()
         .collection("/flats/");
 
+      // TODO: Redo search 5 last days if project becomes active again
+      // from.setDate(from.getDate() - 5);
+
+      // Watamato Cloud Functions is currently discontinued, I have found a temporary lease.
       const from: Date = new Date();
-      from.setDate(from.getDate() - 5);
+      from.setDate(1);
+      from.setMonth(9);
+      from.setFullYear(2020);
 
       const snapShot: admin.firestore.QuerySnapshot = await collectionRef
         .where("published_at", ">", from)
