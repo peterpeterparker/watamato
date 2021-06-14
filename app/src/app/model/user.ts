@@ -1,5 +1,7 @@
 import {DocumentReference} from '@angular/fire/firestore';
 
+import firebase from 'firebase';
+
 export interface UserData {
   new_ids?: string[];
   disliked_ids?: string[];

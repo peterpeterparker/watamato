@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 import {Observable} from 'rxjs';
 
-import {User} from 'firebase';
+import {User} from '@firebase/auth-types';
 
 import {AuthService} from '../../services/auth/auth.service';
 

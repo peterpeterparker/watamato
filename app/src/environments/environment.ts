@@ -1,5 +1,7 @@
 import {firebase} from './firebase.environment';
-import {name, version} from '../../package.json';
+
+import packageInfo from '../../package.json';
+const {name, version} = packageInfo;
 
 export const environment = {
   production: false,
