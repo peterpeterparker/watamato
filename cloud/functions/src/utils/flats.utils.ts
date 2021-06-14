@@ -48,7 +48,7 @@ export function add(
   return new Promise<string>(async (resolve, reject) => {
     try {
       if (!flatData || flatData === undefined) {
-        resolve();
+        reject("No flat data");
         return;
       }
 
@@ -98,7 +98,7 @@ function get(flatData: FlatData | undefined): Promise<Flat | undefined> {
   return new Promise<Flat | undefined>(async (resolve, reject) => {
     try {
       if (!flatData || flatData === undefined || !flatData.url) {
-        resolve();
+        reject("No flat data");
         return;
       }
 

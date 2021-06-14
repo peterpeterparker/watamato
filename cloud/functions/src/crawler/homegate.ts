@@ -51,7 +51,7 @@ async function goToWohnung(page: Page, index: number) {
 
 async function autoScroll(page: Page) {
   await page.evaluate(async () => {
-    await new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       let totalHeight = 0;
       const distance = 100;
       const timer = setInterval(() => {
@@ -72,7 +72,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
   page.on("console", consoleObj => console.log(consoleObj.text()));
 
   const elements: string[] = await page.evaluate(() =>
-    [...document.querySelectorAll('a[data-test="result-list-item"')].map(
+    [...document.querySelectorAll('a[data-test="result-list-item"]')].map(
       a => a.outerHTML
     )
   );
@@ -176,7 +176,8 @@ function filterPlz(dom: JSDOM): boolean {
 
 // (async () => {
 //   try {
-//     await crawlHomegate();
+//     const results = await crawlHomegate();
+//     console.log(results);
 //   } catch (e) {
 //     // Deal with the fact the chain failed
 //   }
