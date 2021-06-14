@@ -4,7 +4,7 @@ import { JSDOM } from "jsdom";
 
 import { FlatData } from "../model/flat";
 
-import { PLZ, plzUrl } from "../utils/crawler.utils";
+import {PLZ, plzUrl, priceMax, priceMin} from '../utils/crawler.utils';
 
 export async function crawlHomegate(): Promise<FlatData[] | undefined> {
   const browser: Browser = await launch({ args: ["--no-sandbox"] });
@@ -28,7 +28,7 @@ export async function crawlHomegate(): Promise<FlatData[] | undefined> {
 }
 
 async function goToWohnung(page: Page, index: number) {
-  let url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=2000&ah=3000`;
+  let url: string = `https://www.homegate.ch/mieten/wohnung/trefferliste?o=dateCreated-desc&loc=${plzUrl()}&ag=${priceMin}&ah=${priceMax}`;
 
   if (index > 1) {
     url += `&ep=${index}`;
