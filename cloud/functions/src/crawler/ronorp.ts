@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 
 import { FlatData } from "../model/flat";
 
-import { PLZ } from "../utils/crawler.utils";
+import { PLZ, priceMax, priceMin } from "../utils/crawler.utils";
 
 export async function crawlRonorp(): Promise<FlatData[] | undefined> {
   const browser: Browser = await launch({ args: ["--no-sandbox"] });
@@ -64,23 +64,23 @@ function allElementsPublishedToday(elements: FlatData[] | undefined): boolean {
 
 async function goNextPage(page: Page, index: number) {
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
+    (selector) => document.querySelector(selector).click(),
     `a[data-value="${index}"]`
   );
 
   await page.waitForNavigation({
-    waitUntil: "networkidle0"
+    waitUntil: "networkidle0",
   });
 }
 
 async function findElements(page: Page): Promise<FlatData[] | undefined> {
   await autoScroll(page, new Date());
 
-  page.on("console", consoleObj => console.log(consoleObj.text()));
+  page.on("console", (consoleObj) => console.log(consoleObj.text()));
 
   const elements: string[] = await page.evaluate(() =>
     [...document.querySelectorAll("div.short_advert.inserate")].map(
-      div => div.innerHTML
+      (div) => div.innerHTML
     )
   );
 
@@ -159,7 +159,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
             : 0,
         price: price,
         published_at: today,
-        source: "ronorp"
+        source: "ronorp",
       } as FlatData;
     });
 
@@ -223,7 +223,7 @@ async function autoScroll(page: Page, startTime: Date) {
   }
 
   await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight), {
-    waitUntil: "networkidle0"
+    waitUntil: "networkidle0",
   });
   await page.waitForTimeout(500);
 
@@ -238,39 +238,39 @@ async function autoScroll(page: Page, startTime: Date) {
 
 async function filterSearch(page: Page) {
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
+    (selector) => document.querySelector(selector).click(),
     'input[name="fdata[advert_type]"][attr_label="Biete"]'
   );
 
   await page.waitForNavigation({
-    waitUntil: "networkidle0"
+    waitUntil: "networkidle0",
   });
 
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
+    (selector) => document.querySelector(selector).click(),
     'input[name="fdata[sp_realty_type]"][attr_label="Mieten"]'
   );
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
+    (selector) => document.querySelector(selector).click(),
     'input[name="fdata[sp_realty_stadt_agglo]"][attr_label="Stadt"]'
   );
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
-    'input[name="fdata[sp_realty_price_from]"][attr_label="2000"]'
+    (selector) => document.querySelector(selector).click(),
+    `input[name="fdata[sp_realty_price_from]"][attr_label="${priceMin}"]`
   );
 
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
-    'input[name="fdata[sp_realty_price_to]"][attr_label="3000"]'
+    (selector) => document.querySelector(selector).click(),
+    `input[name="fdata[sp_realty_price_to]"][attr_label="${priceMax}"]`
   );
 
   await page.evaluate(
-    selector => document.querySelector(selector).click(),
+    (selector) => document.querySelector(selector).click(),
     'a[data-label="FilterButton"]'
   );
 
   await page.waitForNavigation({
-    waitUntil: "networkidle0"
+    waitUntil: "networkidle0",
   });
 }
 
@@ -278,7 +278,7 @@ async function goToWohnung(page: Page) {
   await page.goto(
     "https://www.ronorp.net/zuerich/immobilien/wohnung-zuerich.1219/",
     {
-      waitUntil: "networkidle0"
+      waitUntil: "networkidle0",
     }
   );
 }
@@ -308,7 +308,7 @@ async function goLogin(page: Page) {
 async function goHomepage(page: Page) {
   await page.goto("https://www.ronorp.net/", {
     waitUntil: "domcontentloaded",
-    timeout: 30000
+    timeout: 30000,
   });
 
   await (page as any)._client.send("ServiceWorker.enable");
