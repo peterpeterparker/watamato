@@ -225,7 +225,7 @@ async function autoScroll(page: Page, startTime: Date) {
   await page.evaluate(() => window.scrollBy(0, document.body.scrollHeight), {
     waitUntil: "networkidle0"
   });
-  await page.waitFor(500);
+  await page.waitForTimeout(500);
 
   const currentPageLink = await page.evaluate(() =>
     document.querySelector("span.pages_links_current")
