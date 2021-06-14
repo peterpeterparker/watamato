@@ -38,8 +38,10 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
   page.on("console", consoleObj => console.log(consoleObj.text()));
 
   const elements: string[] = await page.evaluate(() =>
-    [...document.querySelectorAll("div.flat-thumb")].map(a => a.outerHTML)
+    [...document.querySelectorAll("div.listing-thumb")].map(a => a.outerHTML)
   );
+
+  console.log(elements);
 
   if (!elements || elements.length <= 0) {
     return undefined;
@@ -60,7 +62,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
       );
       const title = dom.window.document.querySelector("h2");
       const location = dom.window.document.querySelector(
-        "span.flat-thumb-title__location"
+        "span.listing-thumb-title__location"
       );
       const priceElement = dom.window.document.querySelector("span.price");
 
@@ -90,7 +92,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
       }
 
       if (title) {
-        const span = title.querySelector("span.flat-thumb-title__location");
+        const span = title.querySelector("span.listing-thumb-title__location");
 
         if (span && span.parentElement) {
           span.parentElement.removeChild(span);
@@ -118,7 +120,7 @@ async function findElements(page: Page): Promise<FlatData[] | undefined> {
 
 function filterPlz(dom: JSDOM): boolean {
   const location = dom.window.document.querySelector(
-    "span.flat-thumb-title__location"
+    "span.listing-thumb-title__location"
   );
 
   if (!location || !location.textContent) {
