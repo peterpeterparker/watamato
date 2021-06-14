@@ -176,7 +176,8 @@ function filterPlz(dom: JSDOM): boolean {
 
 // (async () => {
 //   try {
-//     await crawlHomegate();
+//     const results = await crawlHomegate();
+//     console.log(results);
 //   } catch (e) {
 //     // Deal with the fact the chain failed
 //   }
