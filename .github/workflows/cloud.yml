@@ -3,7 +3,7 @@ name: CI - Cloud
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'cloud/**'
 

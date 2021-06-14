@@ -7,7 +7,7 @@
     "config": "ts-node -O '{\"module\": \"commonjs\"}' ./scripts/config.index.ts",
     "ng": "ng",
     "start": "ng serve",
-    "build": "npm run config && ng build --prod",
+    "build": "npm run config && ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

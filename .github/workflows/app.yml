@@ -3,13 +3,13 @@ name: CI - App
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'app/**'
 
 jobs:
   build:
-    name: Build
+    name: Build and deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -22,23 +22,6 @@ jobs:
         working-directory: ./app
         env:
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-      - name: Archive Artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: app
-          path: app/www
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: app
-          path: app/www
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
